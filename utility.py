@@ -22,14 +22,16 @@ def Q_tensor(n, S=0.5, P=0):
 	return Q
 
 def cartesian(v, normalize=True):
-    ''' coordinate transformation from "(azimuthal, evaluation)" to Cartesian coordinates and normalization over a vector v '''
-    x = np.cos(v[1]) * np.cos(v[0])
-    y = np.cos(v[1]) * np.sin(v[0])
-    z = np.sin(v[1])
-    v = np.array([x, y, z])
-    if normalize:
-        v /= np.sqrt(x**2 + y**2 + z**2)
-    return v
+	''' coordinate transformation from "(azimuthal, evaluation)" to Cartesian coordinates and normalization over a vector v '''
+	if len(v) == 2:
+		x = np.cos(v[1]) * np.cos(v[0])
+		y = np.cos(v[1]) * np.sin(v[0])
+		z = np.sin(v[1])
+		v = np.array([x, y, z])
+	if normalize:
+		x, y, z = v
+		v /= np.sqrt(x**2 + y**2 + z**2)
+	return v
 
 def distance(r1, r2=np.zeros(3)):
 	''' calculate the distance | r | or | r1 - r2 | '''

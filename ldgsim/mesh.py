@@ -1,5 +1,5 @@
 import numpy as np
-import param as p
+import ldgsim.param as p
 
 ''' mesh (object) '''
 class Grid():

@@ -1,6 +1,6 @@
 import numpy as np
-import utility as u
-import param as p
+import ldgsim.utility as u
+import ldgsim.param as p
 
 """ initial n, S and Q """
 n0 = u.cartesian(p.n_init, normalize=True)

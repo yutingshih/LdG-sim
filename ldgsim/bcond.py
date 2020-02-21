@@ -1,6 +1,6 @@
 import numpy as np
-import utility as u
-import param as p
+import ldgsim.utility as u
+import ldgsim.param as p
 
 S0_sub = 0.9
 S0_cen = 0.1

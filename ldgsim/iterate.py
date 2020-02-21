@@ -1,6 +1,6 @@
 import numpy as np
-import utility as u
-import param as p
+import ldgsim.utility as u
+import ldgsim.param as p
 '''
 lapQ = np.(p.mesh_Q)
 

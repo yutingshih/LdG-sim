@@ -31,7 +31,7 @@ def cartesian(v, normalize=True):
 	if normalize:
 		x, y, z = v
 		v /= np.sqrt(x**2 + y**2 + z**2)
-	return v
+	return np.array(v)
 
 def distance(r1, r2=np.zeros(3)):
 	''' calculate the distance | r | or | r1 - r2 | '''

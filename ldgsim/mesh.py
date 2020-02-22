@@ -1,12 +1,12 @@
 import numpy as np
-import ldgsim.param as p
+import param as p
 
 ''' mesh (object) '''
-class Grid():
+class Grid(object):
     """ represent a lattice of the meshgrid in 3-D space """
     def __init__(self, position=np.empty(3),
                 orientation=np.random.randn(3), order_degree=0.5, biaxiality=0):
-        self._X = position
+        self._r = position
         self._n = orientation
         self._S = order_degree
         self._P = biaxiality
@@ -14,15 +14,15 @@ class Grid():
     
     def __str__(self):
         string = ''
-        string += 'X = ' + str(self.X) + '\n'
+        string += 'r = ' + str(self.r) + '\n'
         string += 'n = ' + str(self.n) + '\n'
         string += 'S = ' + str(self.S) + '\n'
         string += 'Q = ' + str(self.Q.flatten()) + '\n'
         return string
 
     @property
-    def X(self):
-        return self._X
+    def r(self):
+        return self._r
     @property
     def n(self):
         return self._n
@@ -36,14 +36,14 @@ class Grid():
     def Q(self):
         return self._Q
 
-    @X.setter
-    def X(self, value):
-        x_limit = p.axis_x[0] <= self.X[0] <= p.axis_x[-1]
-        y_limit = p.axis_y[0] <= self.X[1] <= p.axis_y[-1]
-        z_limit = p.axis_z[0] <= self.X[2] <= p.axis_z[-1]
+    @r.setter
+    def r(self, value):
+        x_limit = p.axis_x[0] <= self.r[0] <= p.axis_x[-1]
+        y_limit = p.axis_y[0] <= self.r[1] <= p.axis_y[-1]
+        z_limit = p.axis_z[0] <= self.r[2] <= p.axis_z[-1]
 
         if x_limit and y_limit and z_limit:
-            self._x = value
+            self._r = value
         else:
             raise ValueError
     
@@ -70,6 +70,7 @@ class Grid():
             raise ValueError
 
 def mesh_gen(size=(p.x_nog, p.y_nog, p.z_nog)):
+    ''' generate the mesh with 3-dim array of Grid objects '''
     mesh = np.empty(size, dtype=object)
     for i in range(size[0]):
         for j in range(size[1]):
@@ -77,4 +78,7 @@ def mesh_gen(size=(p.x_nog, p.y_nog, p.z_nog)):
                 mesh[i, j, k] = Grid(np.array([p.axis_x[i], p.axis_y[j], p.axis_z[k]]))
     return mesh
 
-mesh = mesh_gen()
+if __name__ == '__main__':
+    mesh = mesh_gen()
+else:
+    mesh = mesh_gen()

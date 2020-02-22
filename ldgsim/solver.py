@@ -1,6 +1,20 @@
 import numpy as np
-import ldgsim.utility as u
-import ldgsim.param as p
+import utility as u
+import param as p
+
+""" transform n and S into Q """
+
+
+""" solve n and S field from Q """
+
+
+""" iteration """
+eig_val = np.zeros((3, 3))
+eig_vec = np.zeros((3, 3))
+N_eig = np.zeros(3)
+S_eig = np.zeros(1)
+
+
 '''
 lapQ = np.(p.mesh_Q)
 

@@ -3,9 +3,10 @@
 #### `utility.py`
 > 模組間共用函數
 
-2020/02/15 新增show()、Q_tensor()  
-2020/02/17 新增cartesian()、distance()  
-2020/02/21 修改cartesian()，增加使用彈性  
+2020/02/15 新增`show()`、`Q_tensor()`  
+2020/02/17 新增`cartesian()`、`distance()`  
+2020/02/21 修改`cartesian()`，增加使用彈性  
+2020/02/22 改寫`show()`為grid-based版本，`distance()`用`norm()`取代，改寫`Q_tensor()`加入修正項，比較"pure python"和"using numpy"的執行效率(前者較優，迭代10萬次，後者用時約為前者2倍)
 
 #### `param.py`
 > 物理參數設定
@@ -19,27 +20,33 @@
 > 網格定義、網格生成
 
 2020/02/20 網格定義、網格生成
+2020/02/22 強制`r`為`ndarray`，讓`n`可接受2D或3D的array-like物件且強制normalize
 
 #### `cond.py`
 > 邊界條件和初始條件
 
 2020/02/17 完成 surface anchoring 部分，剩下 substrate 部分  
-2020/02/19 發現envelope定義有問題  
-2020/02/21 新增rotate()，並進行surface anchoring初步視覺化，架構待整理  
-2020/02/17 完成主功能(element-wise)，寫檔和 vectorize 還沒  
+2020/02/19 發現`envelope()`定義有問題  
+2020/02/21 新增`rotate()`，並進行surface anchoring初步視覺化，架構待整理  
+2020/02/17 完成主功能(element-wise)，寫檔和vectorize還沒  
 2020/02/22 合併`bcond.py`和`icond.py`，重構  
 
 #### `solver.py`
 > 尤拉方程數值解
 
 2020/02/17 pseudocode  
-2020/02/22 重新命名，並將Q、n/S間的轉換納入  
+2020/02/22 重新命名，並將Q、n/S間的轉換納入規劃  
 
 #### `output.py`
 > 輸出數據視覺化
 
 2020/02/20 畫圖測試邊界條件，但有問題  
-2020/02/22 封裝成streamline()  
+2020/02/22 封裝成`streamline()`並畫出r field做測試，新增`retrive_r()`、`retrive_n()`並vectorize  
+
+#### `main.py`
+> 主程式
+
+2020/02/22 發現bug，n場經過`rotate()`之後會消失，目前還沒找到原因  
 
 #### `image/`
 > 圖庫

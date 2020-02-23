@@ -21,13 +21,30 @@ def retrive_n(grid):
         return 0.0, 0.0, 0.0
 Retrive_n = np.vectorize(retrive_n)
 
-def streamline(mesh, length=1.0):
+def hedgehog(ax, mesh, length=1.0, color='black'):
+    ''' plot the 3-dimensional vector field of r '''
+    x, y, z = np.meshgrid(p.axis_x, p.axis_y, p.axis_z)
+    ry, rx, rz = Retrive_r(mesh)
+    ax.quiver(x, y, z, rx, ry, rz, length=length, pivot='middle', color=color)
+
+def streamline(ax, mesh, length=1.0, color='b'):
     ''' plot the 3-dimensional vector field of n '''
-    ax = plt.figure(figsize=[7, 7]).gca(projection='3d')
     x, y, z = np.meshgrid(p.axis_x, p.axis_y, p.axis_z)
     ny, nx, nz = Retrive_n(mesh)
-    ax.quiver(x, y, z, nx, ny, nz, length=length, pivot='middle')
-    plt.show()
+    ax.quiver(x, y, z, nx, ny, nz, length=length, pivot='middle', color=color)
+
+def sphere(ax, radius=p.r_nog, resolution=100, color='black', alpha=0.3):
+    ''' draw a sphere at the origin point '''
+    theta = np.linspace(0, np.pi, resolution)
+    phi = np.linspace(0, 2*np.pi, resolution)
+
+    x = radius * np.outer(np.cos(phi), np.sin(theta))
+    y = radius * np.outer(np.sin(phi), np.sin(theta))
+    z = radius * np.outer(np.ones(resolution), np.cos(theta))
+
+    ax.plot_surface(x, y, z, linewidth=0.0, color=color, alpha=alpha)
 
 if __name__ == '__main__':
-    streamline(m.mesh)
+    ax = plt.figure().gca(projection='3d')
+    streamline(ax, m.mesh, color='black')
+    plt.show()

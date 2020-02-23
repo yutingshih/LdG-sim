@@ -20,7 +20,9 @@ def main():
     # numerical iteration (TODO)
 
     # visualization
-    o.streamline(mesh)
+    ax = plt.figure(figsize=[7, 7]).gca(projection='3d')
+    o.streamline(ax, mesh)
+    plt.show()
 
 if __name__ == '__main__':
     main()

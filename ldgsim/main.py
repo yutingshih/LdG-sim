@@ -15,10 +15,7 @@ def main():
     mesh = m.mesh_gen()
 
     # set initial condition and boundary condition
-    for i in range(p.x_nog):
-        for j in range(p.y_nog):
-            for k in range(p.z_nog):
-                c.rotate(mesh[i, j, k])
+    # c.Rotate(mesh)
     
     # numerical iteration (to do)
 

@@ -20,13 +20,13 @@ def is_bot(grid):
 	return False
 
 def is_osh(grid, thickness=p.dx, radius=p.r_nog):
-	d = u.distance(grid.r)
+	d = np.linalg.norm(grid.r)
 	if (d >= radius and abs(d - radius) < thickness):
 		return True
 	return False
 
 def is_ish(grid, thickness=p.dx, radius=p.r_nog):
-	d = u.distance(grid.r)
+	d = np.linalg.norm(grid.r)
 	if (d < radius and abs(d - radius) < thickness):
 		return True
 	return False
@@ -49,8 +49,4 @@ def rotate(grid, alignment=[0, 0, 0], trend=[1, 0, 0], bias=[1, 0, 0]):
 		grid.n = envelope(grid, trend - u.cartesian(bias))
 	else:
 		grid.n = np.array(alignment)	# bulk initial condition
-
-
-# TODO
-# [x] show the orientations of molecules around the sphere surface
-# [ ] add the effect of degree of order S
+Rotate = np.vectorize(rotate)

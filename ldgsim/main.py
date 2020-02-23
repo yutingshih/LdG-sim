@@ -15,9 +15,9 @@ def main():
     mesh = m.mesh_gen()
 
     # set initial condition and boundary condition
-    # c.Rotate(mesh)
+    c.Rotate(mesh)
     
-    # numerical iteration (to do)
+    # numerical iteration (TODO)
 
     # visualization
     o.streamline(mesh)

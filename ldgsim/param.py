@@ -40,7 +40,7 @@ spu = 50
 x_nog = round(x_real / dr)	# number of grids on x dimension (nog = 27)
 y_nog = round(y_real / dr)	# number of grids on y dimension (nog = 27)
 z_nog = round(z_real / dr)	# number of grids on z dimension (nog = 17)
-r_nog = round(r_real / dr)  # radius of shpere (unit: number of grids)
+r_nog = round(r_real / dr)  # radius of shpere (unit: number of grids) (nog = 7)
 
 """ mesh """
 dx = dy = dz = 1

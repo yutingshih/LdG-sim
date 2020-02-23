@@ -34,8 +34,8 @@ def cartesian(v, normalize=True):
 		z = np.sin(v[1])
 		v = np.array([x, y, z])
 	if normalize:
-		x, y, z = v / np.linalg.norm(v)
-	return np.array(v)
+		v = np.array(v) / np.linalg.norm(v)
+	return v
 
 if __name__ == "__main__":
 	number = 123930

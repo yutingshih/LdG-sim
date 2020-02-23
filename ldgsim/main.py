@@ -16,6 +16,7 @@ def main():
 
     # set initial condition and boundary condition
     c.Rotate(mesh)
+    c.Reorder(mesh)
     
     # numerical iteration (TODO)
 

@@ -1,13 +1,14 @@
 import numpy as np
+import utility as u
 import param as p
 
 ''' mesh (object) '''
 class Grid(object):
     """ represent a lattice of the meshgrid in 3-D space """
     def __init__(self, position=np.empty(3),
-                orientation=np.random.randn(3), order_degree=0.5, biaxiality=0):
-        self._r = position
-        self._n = orientation
+                 orientation=np.random.randn(3), order_degree=0.5, biaxiality=0):
+        self._r = np.array(position)
+        self._n = u.cartesian(np.array(orientation))
         self._S = order_degree
         self._P = biaxiality
         self._Q = np.empty((3, 3))
@@ -43,15 +44,14 @@ class Grid(object):
         z_limit = p.axis_z[0] <= self.r[2] <= p.axis_z[-1]
 
         if x_limit and y_limit and z_limit:
-            self._r = value
+            self._r = np.array(value)
         else:
             raise ValueError
     
     @n.setter
     def n(self, value):
-        if len(value) == 3:
-            value / np.sqrt(value[0]**2 + value[1]**2 + value[2]**2)
-            self._n = value
+        if 2 <= len(value) <= 3:
+            self._n = u.cartesian(np.array(value))
         else:
             raise ValueError
     
@@ -80,5 +80,6 @@ def mesh_gen(size=(p.x_nog, p.y_nog, p.z_nog)):
 
 if __name__ == '__main__':
     mesh = mesh_gen()
+    u.Show(mesh[0, 0])
 else:
     mesh = mesh_gen()

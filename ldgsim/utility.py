@@ -1,24 +1,29 @@
 import numpy as np
+from time import time
 
-def show(array, prompt='', seperation=' '):
-	''' print out a 3-dim array '''
-	print(prompt)
-	for z in array:
-		for y in z:
-			for x in y:
-				print(x, end=seperation)
-			print()
-		print()
+def show(grid, end='\n'):
+	''' print out the grid info '''
+	print(grid, end=end)
+Show = np.vectorize(show)
 
-def Q_tensor(n, S=0.5, P=0):
+def Q_tensor(n, S=1, P=0):
 	''' calculate the Q tensor of a certain position which evalueates the liquid crystal molecule's orientation, degree of order and biaxiality '''
-	Q = np.empty((3, 3))
-	for row in n:
-		for col in n:
+	Q = np.zeros((3, 3))
+	for row in range(3):
+		for col in range(3):
 			if row == col:
-				Q[row, col] = (3 * row * col - 1) * S / 2
+				Q[row, col] = (3 * n[row] * n[col] - 1) * (S / 2)
 			else:
-				Q[row, col] = (3 * row * col - 0) * S / 2
+				Q[row, col] = (3 * n[row] * n[col] - 0) * (S / 2)
+	for i in range(3):
+		Q[i, i] -= (Q[0, 0] + Q[1, 1] + Q[2, 2]) / 3
+	return Q
+
+def tensor_Q(n, S=1, P=0):
+	''' calculate the Q tensor of a certain position which evalueates the liquid crystal molecule's orientation, degree of order and biaxiality '''
+	n = np.array(n)
+	Q = (np.outer(n, n) * 3 - np.eye(3)) * (S / 2)
+	Q -= np.trace(Q) * np.eye(3) / 3
 	return Q
 
 def cartesian(v, normalize=True):
@@ -29,11 +34,29 @@ def cartesian(v, normalize=True):
 		z = np.sin(v[1])
 		v = np.array([x, y, z])
 	if normalize:
-		x, y, z = v
-		v /= np.sqrt(x**2 + y**2 + z**2)
+		x, y, z = v / np.linalg.norm(v)
 	return np.array(v)
 
-def distance(r1, r2=np.zeros(3)):
-	''' calculate the distance | r | or | r1 - r2 | '''
-	x, y, z = r1 - r2
-	return np.sqrt(x**2 + y**2 + z**2)
+if __name__ == "__main__":
+	number = 123930
+	n = [1, 0, 0]
+	
+	t = time()
+	for i in range(number):
+		q = Q_tensor(n)
+	t1 = time() - t
+
+	print(q)
+	print()
+
+	t = time()
+	for i in range(number):
+		q = tensor_Q(n)
+	t2 = time() - t
+
+	print(q)
+	print()
+
+	print(f'pure python: {t1}')
+	print(f'using numpy: {t2}')
+	print(f'ratio: {(t2) / (t1)}\n')

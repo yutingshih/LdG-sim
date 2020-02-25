@@ -15,14 +15,15 @@ def main():
     mesh = m.mesh_gen()
 
     # set initial condition and boundary condition
-    c.Rotate(mesh)
-    c.Reorder(mesh)
+    c.Rotate(mesh)  # set orientation n
+    c.Reorder(mesh) # set degree of order S
     
     # numerical iteration (TODO)
+    # s.Evolute(mesh)
 
     # visualization
     ax = plt.figure(figsize=[7, 7]).gca(projection='3d')
-    o.streamline(ax, mesh)
+    o.streamline(ax, mesh)  # draw orientaion n
     plt.show()
 
 if __name__ == '__main__':

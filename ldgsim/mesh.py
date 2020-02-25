@@ -12,6 +12,7 @@ class Grid(object):
         self._S = order_degree
         self._P = biaxiality
         self._Q = np.empty((3, 3))
+        self._h = np.empty((3, 3))
     
     def __str__(self):
         string = ''
@@ -36,6 +37,9 @@ class Grid(object):
     @property
     def Q(self):
         return self._Q
+    @property
+    def h(self):
+        return self._h
 
     @r.setter
     def r(self, value):
@@ -66,6 +70,25 @@ class Grid(object):
     def P(self, value):
         if -1.5 < value < 1.5:
             self._P = value
+        else:
+            raise ValueError
+    
+    @Q.setter
+    def Q(self, value):
+        three_dim = value.shape == (3, 3)
+        symmetric = np.transpose(value) == value
+        traceless = np.trace(value) == 0
+
+        if three_dim and symmetric and traceless:
+            self._Q = value
+        else:
+            raise ValueError
+
+    @h.setter
+    def h(self, value):
+        three_dim = value.shape == (3, 3)
+        if three_dim:
+            self._h = value
         else:
             raise ValueError
 

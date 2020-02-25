@@ -12,11 +12,9 @@ def Q_tensor(n, S=1, P=0):
 	for row in range(3):
 		for col in range(3):
 			if row == col:
-				Q[row, col] = (3 * n[row] * n[col] - 1) * (S / 2)
+				Q[row, col] = (3 * n[row] * n[col] - 1) * (S / 2) - (Q[0, 0] + Q[1, 1] + Q[2, 2]) / 3
 			else:
 				Q[row, col] = (3 * n[row] * n[col] - 0) * (S / 2)
-	for i in range(3):
-		Q[i, i] -= (Q[0, 0] + Q[1, 1] + Q[2, 2]) / 3
 	return Q
 
 def tensor_Q(n, S=1, P=0):

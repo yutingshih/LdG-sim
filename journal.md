@@ -14,13 +14,14 @@
 2020/02/10 完成參數部分的設定  
 2020/02/15 完成網格設定  
 2020/02/19 網格物件化  
-2020/02/20 把網格定義、網格生成拆分成另外的檔案
+2020/02/20 把網格定義、網格生成拆分成另外的檔案  
 
 #### `mesh.py`
 > 網格定義、網格生成
 
-2020/02/20 網格定義、網格生成
-2020/02/22 強制`r`為`ndarray`，讓`n`可接受2D或3D的array-like物件且強制normalize
+2020/02/20 網格定義、網格生成  
+2020/02/22 強制`r`為`ndarray`，讓`n`可接受2D或3D的array-like物件且強制normalize  
+2020/02/24 新增`_h`、`_Q`屬性，含getter、setter
 
 #### `cond.py`
 > 邊界條件和初始條件
@@ -29,6 +30,7 @@
 2020/02/19 發現`envelope()`定義有問題  
 2020/02/21 新增`rotate()`，並進行surface anchoring初步視覺化，架構待整理  
 2020/02/17 完成主功能(element-wise)，寫檔和vectorize還沒  
+2020/02/24 修正「一旋轉圖就不見」的問題(`retrive()`的回傳類型不一致)、新增`reorder()`設定S的邊界條件  
 2020/02/22 合併`bcond.py`和`icond.py`，重構  
 
 #### `solver.py`
@@ -36,12 +38,14 @@
 
 2020/02/17 pseudocode  
 2020/02/22 重新命名，並將Q、n/S間的轉換納入規劃  
+2020/02/24 新增`retrive_Q()`、`laplace()`、`h()`、`state_evolve()`，未完  
 
 #### `output.py`
 > 輸出數據視覺化
 
 2020/02/20 畫圖測試邊界條件，但有問題  
 2020/02/22 封裝成`streamline()`並畫出r field做測試，新增`retrive_r()`、`retrive_n()`並vectorize  
+2020/02/24 新增`sphere`、`hedgehog`  
 
 #### `main.py`
 > 主程式
@@ -52,3 +56,4 @@
 > 圖庫
 
 2020/02/21 新增 `surface_anchoring.png`：顯示球表面液晶分子走向  
+2020/02/23 新增 `BC_surface_anchoring.png`：修正球表面液晶分子走向  

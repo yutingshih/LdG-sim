@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+import json
+
 from ldgsim import param as p
 from ldgsim import mesh as m
 from ldgsim import cond as c
@@ -43,6 +45,26 @@ def sphere(ax, radius=p.r_nog, resolution=100, color='black', alpha=0.3):
     z = radius * np.outer(np.ones(resolution), np.cos(theta))
 
     ax.plot_surface(x, y, z, linewidth=0.0, color=color, alpha=alpha)
+
+def save(grid):
+    data = {
+        'r': grid.r.tolist(),
+        'n': grid.n.tolist(),
+        'S': grid.S,
+        'P': grid.P,
+        'Q': grid.Q.tolist(),
+        'h': grid.h.tolist()
+    }
+    return data
+
+def Save(mesh):
+    data = []
+    for layer in mesh:
+        for line in layer:
+            for grid in line:
+                data.append(save(grid))
+    with open(p.path, 'w') as file:
+        json.dump(data, file, indent=4)
 
 if __name__ == '__main__':
     ax = plt.figure().gca(projection='3d')

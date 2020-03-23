@@ -21,10 +21,15 @@ def main():
     c.Rotate(mesh)  # set orientation n
     c.Reorder(mesh) # set degree of order S
     
-    # numerical iteration (TODO)
-    # s.Evolute(mesh)
-    # s.Eigen(mesh)
+    # numerical iteration
+    s.all_Q(mesh)
+    for i in range(p.t_total / p.dt):
+        s.evolute(mesh)
+    s.Eigen(mesh)
 
+    # store data
+    o.Save(mesh)
+    
     # visualization
     ax = plt.figure(figsize=[7, 7]).gca(projection='3d')
     o.streamline(ax, mesh)  # draw orientaion n

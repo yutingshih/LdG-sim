@@ -1,7 +1,7 @@
 import numpy as np
 
 """ path """
-path = './result.txt'
+path = '../data/result.txt'
 
 """ spatial parameters """
 dr = 300			# spatial resolution (300 nm per grid)

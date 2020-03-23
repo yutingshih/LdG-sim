@@ -22,6 +22,7 @@
 2020/02/20 網格定義、網格生成  
 2020/02/22 強制`r`為`ndarray`，讓`n`可接受2D或3D的array-like物件且強制normalize  
 2020/02/24 新增`_h`、`_Q`屬性，含getter、setter
+2020/03/21 改成absolute import  
 
 #### `cond.py`
 > 邊界條件和初始條件
@@ -32,6 +33,7 @@
 2020/02/17 完成主功能(element-wise)，寫檔和vectorize還沒  
 2020/02/24 修正「一旋轉圖就不見」的問題(`retrive()`的回傳類型不一致)、新增`reorder()`設定S的邊界條件  
 2020/02/22 合併`bcond.py`和`icond.py`，重構  
+2020/03/21 改成absolute import  
 
 #### `solver.py`
 > 尤拉方程數值解
@@ -39,6 +41,7 @@
 2020/02/17 pseudocode  
 2020/02/22 重新命名，並將Q、n/S間的轉換納入規劃  
 2020/02/24 新增`retrive_Q()`、`laplace()`、`h()`、`state_evolve()`，未完  
+2020/03/21 改成absolute import，新增`gradient()`、`eigen()`、修改`laplace()`  
 
 #### `output.py`
 > 輸出數據視覺化
@@ -46,11 +49,13 @@
 2020/02/20 畫圖測試邊界條件，但有問題  
 2020/02/22 封裝成`streamline()`並畫出r field做測試，新增`retrive_r()`、`retrive_n()`並vectorize  
 2020/02/24 新增`sphere`、`hedgehog`  
+2020/03/21 改成absolute import  
 
 #### `main.py`
 > 主程式
 
 2020/02/22 發現bug，n場經過`rotate()`之後會消失，目前還沒找到原因  
+2020/03/21 改成absolute import  
 
 #### `image/`
 > 圖庫

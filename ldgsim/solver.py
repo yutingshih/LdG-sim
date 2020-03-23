@@ -1,6 +1,4 @@
 import numpy as np
-import sys, os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from ldgsim import utility as u
 from ldgsim import param as p
@@ -20,6 +18,21 @@ def Q_tensor(n, S=1, P=0):
 			else:
 				Q[row, col] = (3 * n[row] * n[col] - 0) * (S / 2)
 	return Q
+
+# TODO: DUBUG
+def printQ(Q):
+    for i in Q:
+        for j in i:
+            print(j, end=' ')
+        print()
+
+def all_Q(mesh):
+    for layer in mesh:
+        for line in layer:
+            for grid in line:
+                Q = Q_tensor(grid.n, grid.S, grid.P)
+                printQ(Q)
+                grid.Q = Q
 
 # deprecated
 def tensor_Q(n, S=1, P=0):
@@ -137,7 +150,7 @@ def evolute(mesh, L=p.L, A=p.A, B=p.B, C=p.C, W_subs=p.W_sub, W_shel=p.W_she, dt
                 grid = mesh[x, y, z]
                 lap_Q = lap_Qs[x, y, z]
                 grad_Q = grad_Qs[x, y, z]
-                
+
                 if c.is_top(grid) or c.is_bot(grid):        # h_surf of substrate
                     Q_bound = Q_tensor(p.n_subs, p.S_subs)
                     grid.h = h_surf(grid.Q, grad_Q, Q_bound=Q_bound, surf_normal=np.array([0, 0, 1]), W=W_subs)
@@ -156,25 +169,14 @@ if __name__ == "__main__":
     c = np.sum(np.multiply(a, b), axis=0)
     print(c)
 
+# TODO: XZ-periodic boundary
 
 '''
-lapQ = np.(p.mesh_Q)
-
-h_bulk = u.h_bulk(Q)
-h_subs = u.h_surf(Q, p.W_sub)
-h_shel = u.h_surf(Q, p.W_she)
-
-Q += p.dt / p.eta * h_bulk
-Q += p.dt / p.eta * h_subs
-Q += p.dt / p.eta * h_shel
-
 # XZ-periodic boundary
 
 F_bulk = 
 F_subs = 
 F_shel = 
 F_total = F_bulk + F_subs + F_shel
-
-# solve n, S from Q
 
 '''

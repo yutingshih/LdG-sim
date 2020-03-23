@@ -1,6 +1,6 @@
 import numpy as np
-import utility as u
-import param as p
+from ldgsim import utility as u
+from ldgsim import param as p
 
 ''' mesh (object) '''
 class Grid(object):
@@ -20,6 +20,7 @@ class Grid(object):
         string += 'n = ' + str(self.n) + '\n'
         string += 'S = ' + str(self.S) + '\n'
         string += 'Q = ' + str(self.Q.flatten()) + '\n'
+        string += 'h = ' + str(self.h.flatten()) + '\n'
         return string
 
     @property

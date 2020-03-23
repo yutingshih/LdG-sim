@@ -1,7 +1,7 @@
 import numpy as np
-import utility as u
-import param as p
-import mesh as m
+from ldgsim import utility as u
+from ldgsim import param as p
+from ldgsim import mesh as m
 
 """ grid selectors """
 
@@ -30,13 +30,13 @@ def is_ish(grid, thickness=p.dx, radius=p.r_nog):
 
 """ apply the boundary conditions and initial conditions """
 
-def envelope(grid, trend=[1, 0, 0]):
+def envelope(grid, trend=p.n_shel):
 	''' calculate the orientation around the sphere under a special arrangement '''
 	N = u.cartesian(trend)
 	r = u.cartesian(grid.r)
 	return N - np.dot(N, r) * r
 
-def rotate(grid, alignment=[0, 0, 0], trend=[1, 0, 0], bias=[1, 0, 0]):
+def rotate(grid, alignment=p.n_subs, trend=p.n_shel, bias=p.n_bias):
 	''' grid-based molecule orientation rotator '''
 	if is_top(grid) or is_bot(grid):
 		grid.n = np.array(alignment)
@@ -48,7 +48,7 @@ def rotate(grid, alignment=[0, 0, 0], trend=[1, 0, 0], bias=[1, 0, 0]):
 		grid.n = np.array(alignment)	# bulk initial condition
 Rotate = np.vectorize(rotate)
 
-def reorder(grid, S_subs=0.9, S_cent=0.1, S_init=0.5):
+def reorder(grid, S_subs=p.S_subs, S_cent=p.S_cent, S_init=p.S_init):
 	''' reassign the degree of order of liquid crystal molecule '''
 	if is_top(grid) or is_bot(grid):
 		grid.S = S_subs

@@ -13,7 +13,7 @@ r_real = 2000       # radius (nm) of shpere (i.e. origin of meshgrid)
 """ temporal parameters """
 dt = 3e-7		# temporal resolution
 t_total = 3	 	# total time
-eta = 1	    	# relaxation coefficient
+gamma = 1	    # relaxation coefficient
 
 """ initial orientaion (azimuthal, elevation) """
 n_init = [(45 * np.pi / 180), 0]
@@ -48,5 +48,13 @@ dx = dy = dz = 1
 axis_x = np.arange(-x_nog/2+0.5, x_nog/2+0.5, dx)		# (-13 to 13)
 axis_y = np.arange(-y_nog/2+0.5, y_nog/2+0.5, dy)		# (-13 to 13)
 axis_z = np.arange(-z_nog/2+0.5, z_nog/2+0.5, dz)		# ( -8 to  8)
+
+""" initial and boundary conditions """
+S_subs = 0.9
+S_cent = 0.1
+S_init = 0.5
+n_subs = [1, 0, 0]
+n_shel = [1, 0, 0]
+n_bias = [1, 0, 0]
 
 """ end """

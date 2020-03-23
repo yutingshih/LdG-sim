@@ -1,36 +1,36 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-import param as p
-import mesh as m
-import cond as c
+from ldgsim import param as p
+from ldgsim import mesh as m
+from ldgsim import cond as c
 
-def retrive_r(grid):
-    ''' retrive the position r from a single grid and store it as a tuple '''
+def filter_r(grid):
+    ''' filter the position r from a single grid and store it as a tuple '''
     if c.is_osh(grid):
         return grid.r[0], grid.r[1], grid.r[2]
     else:
         return 0.0, 0.0, 0.0
-Retrive_r = np.vectorize(retrive_r)
+Filter_r = np.vectorize(filter_r)
 
-def retrive_n(grid):
-    ''' retrive the orientation n from a single grid and store it as a tuple '''
+def filter_n(grid):
+    ''' filter the orientation n from a single grid and store it as a tuple '''
     if c.is_osh(grid):
         return grid.n[0], grid.n[1], grid.n[2]
     else:
         return 0.0, 0.0, 0.0
-Retrive_n = np.vectorize(retrive_n)
+Filter_n = np.vectorize(filter_n)
 
 def hedgehog(ax, mesh, length=1.0, color='black'):
     ''' plot the 3-dimensional vector field of r '''
     x, y, z = np.meshgrid(p.axis_x, p.axis_y, p.axis_z)
-    ry, rx, rz = Retrive_r(mesh)
+    ry, rx, rz = Filter_r(mesh)
     ax.quiver(x, y, z, rx, ry, rz, length=length, pivot='middle', color=color)
 
 def streamline(ax, mesh, length=1.0, color='b'):
     ''' plot the 3-dimensional vector field of n '''
     x, y, z = np.meshgrid(p.axis_x, p.axis_y, p.axis_z)
-    ny, nx, nz = Retrive_n(mesh)
+    ny, nx, nz = Filter_n(mesh)
     ax.quiver(x, y, z, nx, ny, nz, length=length, pivot='middle', color=color)
 
 def sphere(ax, radius=p.r_nog, resolution=100, color='black', alpha=0.3):

@@ -2,12 +2,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-import utility as u
-import param as p
-import mesh as m
-import cond as c
-import solver as s
-import output as o
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+
+from ldgsim import utility as u
+from ldgsim import param as p
+from ldgsim import mesh as m
+from ldgsim import cond as c
+from ldgsim import solver as s
+from ldgsim import output as o
 
 
 def main():
@@ -20,6 +23,7 @@ def main():
     
     # numerical iteration (TODO)
     # s.Evolute(mesh)
+    # s.Eigen(mesh)
 
     # visualization
     ax = plt.figure(figsize=[7, 7]).gca(projection='3d')

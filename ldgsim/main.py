@@ -23,17 +23,19 @@ def main():
     
     # numerical iteration
     s.all_Q(mesh)
-    for i in range(p.t_total / p.dt):
+    for i in range(int(p.t_total / p.dt)):
+        print(f'progress: {100 * i * p.dt / p.t_total: .5f} %')
         s.evolute(mesh)
     s.Eigen(mesh)
 
     # store data
     o.Save(mesh)
-    
+
     # visualization
     ax = plt.figure(figsize=[7, 7]).gca(projection='3d')
     o.streamline(ax, mesh)  # draw orientaion n
     plt.show()
+
 
 if __name__ == '__main__':
     main()

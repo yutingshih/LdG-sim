@@ -5,6 +5,13 @@ from ldgsim import param as p
 from ldgsim import cond as c
 from ldgsim import mesh as m
 
+def println(Q):
+    ''' print for debug '''
+    for i in Q:
+        for j in i:
+            print(j, end=' ')
+        print()
+    print()
 
 """ transform n and S into Q """
 
@@ -19,24 +26,27 @@ def Q_tensor(n, S=1, P=0):
 				Q[row, col] = (3 * n[row] * n[col] - 0) * (S / 2)
 	return Q
 
-# TODO: DUBUG
-def printQ(Q):
-    for i in Q:
-        for j in i:
-            print(j, end=' ')
-        print()
+def Q_init(n, S=1, P=0):
+    ''' calculate the Q tensor of a certain position which evalueates the liquid crystal molecule's orientation, degree of order and biaxiality '''
+    Q = np.zeros((3, 3))
+    for row in range(3):
+        for col in range(3):
+            if row == col:
+                Q[row, col] = (3 * n[row] * n[col] - 1) * (S / 2)
+            else:
+                Q[row, col] = (3 * n[row] * n[col] - 0) * (S / 2)
+    return Q
 
 def all_Q(mesh):
     for layer in mesh:
         for line in layer:
             for grid in line:
-                Q = Q_tensor(grid.n, grid.S, grid.P)
-                printQ(Q)
+                Q = Q_init(grid.n, grid.S, grid.P)
                 grid.Q = Q
 
 # deprecated
 def tensor_Q(n, S=1, P=0):
-	''' calculate the Q tensor of a certain position which evalueates the liquid crystal molecule's orientation, degree of order and biaxiality '''
+	''' (Deprecated) calculate the Q tensor of a certain position which evalueates the liquid crystal molecule's orientation, degree of order and biaxiality '''
 	n = np.array(n)
 	Q = (np.outer(n, n) * 3 - np.eye(3)) * (S / 2)
 	Q -= np.trace(Q) * np.eye(3) / 3
@@ -58,7 +68,7 @@ Eigen = np.vectorize(eigen)
 
 # deprecated
 def retrive_Q(mesh):
-    ''' retrive the tensorial order parameter Q from mesh and store it as a big 3*3 tuple '''
+    ''' (Deprecated) retrive the tensorial order parameter Q from mesh and store it as a big 3*3 tuple '''
     all_Q = np.vectorize(lambda grid, i, j: grid.Q[i, j])
     Qs = np.empty((3, 3))
     for i in range(3):
@@ -68,7 +78,7 @@ def retrive_Q(mesh):
 
 # deprecated
 def laplace(Qs, i, j):
-    ''' finite difference discrete laplacian of Q_ij of all the points in the mesh '''
+    ''' (Deprecated) finite difference discrete laplacian of Q_ij of all the points in the mesh '''
     lap_Q = np.empty((p.x_nog, p.y_nog, p.z_nog))
     for x in range(p.x_nog):
         for y in range(p.y_nog):
@@ -83,7 +93,7 @@ def laplace(Qs, i, j):
 
 # deprecated
 def normal_dot_gradient(Qs, i, j, dr=p.dr_lap):
-    ''' inner product of gradient of Q_ij and the surface normal of all the points in the mesh '''
+    ''' (Deprecated) inner product of gradient of Q_ij and the surface normal of all the points in the mesh '''
     # surface normal = normalized r field (shape = 27 * 27 * 17)
     grad_Q = np.empty((p.x_nog, p.y_nog, p.z_nog))
     for x in range(p.x_nog):
@@ -97,21 +107,32 @@ def normal_dot_gradient(Qs, i, j, dr=p.dr_lap):
 
 def laplacian(mesh):
     ''' finite difference discrete laplacian of Q_ij of all the points in the mesh '''
-    lap_Qs = np.empty(mesh.shape)
+    lap_Qs = np.empty((*mesh.shape, 3, 3))
     for x in range(p.x_nog):
         for y in range(p.y_nog):
-            for z in range(p.z_nog):
-                lap_Qs[x, y, z] = np.average(mesh[x-1, y, z].Q,
-                                             mesh[x+1, y, z].Q,
-                                             mesh[x, y-1, z].Q,
-                                             mesh[x, y+1, z].Q,
-                                             mesh[x, y, z-1].Q,
-                                             mesh[x, y, z+1].Q) - mesh[x, y, z].Q
+            for z in range(1, p.z_nog-1):
+                if x == 0:
+                    x = -2
+                elif x == p.x_nog - 1:
+                    x = 1
+                if y == 0:
+                    y = -2
+                elif y == p.y_nog - 1:
+                    y = 1
+
+                q1 = mesh[x-1, y, z].Q
+                q2 = mesh[x+1, y, z].Q
+                q3 = mesh[x, y-1, z].Q
+                q4 = mesh[x, y+1, z].Q
+                q5 = mesh[x, y, z-1].Q
+                q6 = mesh[x, y, z+1].Q
+                temp = np.array([q1, q2, q3, q4, q5, q6])
+                lap_Qs[x, y, z] = np.average(temp, axis=0) - mesh[x, y, z].Q
     return lap_Qs    # shape = (27, 27, 17, 3, 3)
 
 def gradient(mesh, dx=p.dr_lap, dy=p.dr_lap, dz=p.dr_lap):
-    '''gradient of Q_ij of all the points in the mesh '''
-    grad_Qs = np.empty(mesh.shape)
+    ''' gradient of Q_ij of all the points in the mesh '''
+    grad_Qs = np.empty((*mesh.shape, 3, 3, 3))
     for x in range(p.x_nog):
         for y in range(p.y_nog):
             for z in range(p.z_nog):
@@ -136,8 +157,7 @@ def h_surf(Q, grad_Q, Q_bound, surf_normal, W=p.W_sub, L=p.L):
     h = np.empty((3, 3))
     for i in range(3):
         for j in range(3):
-            h[i, j] = (L * np.sum(np.multiply(grad_Q, surf_normal), axis=0) +
-                       W * (Q[i, j] - Q_bound[i, j]))
+            h[i, j] = (L * grad_Q[i, j].dot(surf_normal)) + W * (Q[i, j] - Q_bound[i, j])
     return h
 
 def evolute(mesh, L=p.L, A=p.A, B=p.B, C=p.C, W_subs=p.W_sub, W_shel=p.W_she, dt=p.dt, gamma=p.gamma):
@@ -155,11 +175,22 @@ def evolute(mesh, L=p.L, A=p.A, B=p.B, C=p.C, W_subs=p.W_sub, W_shel=p.W_she, dt
                     Q_bound = Q_tensor(p.n_subs, p.S_subs)
                     grid.h = h_surf(grid.Q, grad_Q, Q_bound=Q_bound, surf_normal=np.array([0, 0, 1]), W=W_subs)
                 elif c.is_osh(grid) or c.is_ish(grid):      # h_surf of shell
-                    Q_bound = Q_tensor(c.envelope(p.n_shel), p.S_subs)
+                    Q_bound = Q_tensor(c.envelope(grid, p.n_shel), p.S_subs)
                     grid.h = h_surf(grid.Q, grad_Q, Q_bound=Q_bound, surf_normal=u.cartesian(grid.r), W=W_shel)
                 else:                                       # h_bulk
                     grid.h = h_bulk(grid.Q, lap_Q)
-                grid.Q += grid.h * dt / gamma - np.trace(grid.Q) * np.eye(3) / 3     # EL modification
+                
+                newQ = grid.Q + grid.h * dt / gamma
+                newQ -= np.trace(newQ) * np.eye(3) / 3     # EL modification
+
+                symmetric = (abs(np.transpose(newQ) - newQ) <= np.full((3, 3), 2e-8)).all()
+                if not symmetric:
+                    print(f'\nnewQ =\n{newQ}\n')
+                    print(f'\nnp.transpose(newQ) =\n{np.transpose(newQ)}\n')
+                    print(f'\nnewQ - np.transpose(newQ) =\n{newQ - np.transpose(newQ)}\n')
+                
+                grid.Q = newQ
+
 
 if __name__ == "__main__":
     a = np.arange(1, 28).reshape([3, 3, 3])

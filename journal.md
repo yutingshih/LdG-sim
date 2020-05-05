@@ -1,5 +1,10 @@
 # LdG simulation development journal
 
+#### Todo list
+- 2D slice
+- load data
+- C-Python API
+
 #### `utility.py`
 > 模組間共用函數
 
@@ -15,6 +20,7 @@
 2020/02/15 完成網格設定  
 2020/02/19 網格物件化  
 2020/02/20 把網格定義、網格生成拆分成另外的檔案  
+2020/03/23 新增邊界條件和初始條件的參數  
 
 #### `mesh.py`
 > 網格定義、網格生成
@@ -42,6 +48,7 @@
 2020/02/22 重新命名，並將Q、n/S間的轉換納入規劃  
 2020/02/24 新增`retrive_Q()`、`laplace()`、`h()`、`state_evolve()`，未完  
 2020/03/21 改成absolute import，新增`gradient()`、`eigen()`、修改`laplace()`  
+2020/05/06 解決迭代過程中traceless和asymmetric的問題  
 
 #### `output.py`
 > 輸出數據視覺化
@@ -50,12 +57,14 @@
 2020/02/22 封裝成`streamline()`並畫出r field做測試，新增`retrive_r()`、`retrive_n()`並vectorize  
 2020/02/24 新增`sphere`、`hedgehog`  
 2020/03/21 改成absolute import  
+2020/03/23 新增存檔功能`save()`  
 
 #### `main.py`
 > 主程式
 
 2020/02/22 發現bug，n場經過`rotate()`之後會消失，目前還沒找到原因  
 2020/03/21 改成absolute import  
+2020/03/23 加入iteration步驟  
 
 #### `image/`
 > 圖庫

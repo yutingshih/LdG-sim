@@ -8,7 +8,7 @@ git clone https://github.com/tings0802/LdG-sim.git
 
 
 ## Prerequisites
-- Python 3
+- Python 3.5 or later
 - Numpy
 - Matplotlib
 

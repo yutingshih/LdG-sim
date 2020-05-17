@@ -44,14 +44,6 @@ def all_Q(mesh):
                 Q = Q_init(grid.n, grid.S, grid.P)
                 grid.Q = Q
 
-# deprecated
-def tensor_Q(n, S=1, P=0):
-	''' (Deprecated) calculate the Q tensor of a certain position which evalueates the liquid crystal molecule's orientation, degree of order and biaxiality '''
-	n = np.array(n)
-	Q = (np.outer(n, n) * 3 - np.eye(3)) * (S / 2)
-	Q -= np.trace(Q) * np.eye(3) / 3
-	return Q
-
 """ solve n and S field from Q """
 
 def eigen(grid):
@@ -65,45 +57,6 @@ def eigen(grid):
 Eigen = np.vectorize(eigen)
 
 """ iteration """
-
-# deprecated
-def retrive_Q(mesh):
-    ''' (Deprecated) retrive the tensorial order parameter Q from mesh and store it as a big 3*3 tuple '''
-    all_Q = np.vectorize(lambda grid, i, j: grid.Q[i, j])
-    Qs = np.empty((3, 3))
-    for i in range(3):
-        for j in range(3):
-            Qs[i, j] = all_Q(mesh, i, j)
-    return Qs   # shape = (3, 3, 27, 27, 17)
-
-# deprecated
-def laplace(Qs, i, j):
-    ''' (Deprecated) finite difference discrete laplacian of Q_ij of all the points in the mesh '''
-    lap_Q = np.empty((p.x_nog, p.y_nog, p.z_nog))
-    for x in range(p.x_nog):
-        for y in range(p.y_nog):
-            for z in range(p.z_nog):
-                lap_Q[x, y, z] = np.average(Qs[i, j, x-1, y, z],
-                                            Qs[i, j, x+1, y, z],
-                                            Qs[i, j, x, y-1, z],
-                                            Qs[i, j, x, y+1, z],
-                                            Qs[i, j, x, y, z-1],
-                                            Qs[i, j, x, y, z+1]) - Qs[i, j, x, y, z]
-    return lap_Q   # shape = (27, 27, 17)
-
-# deprecated
-def normal_dot_gradient(Qs, i, j, dr=p.dr_lap):
-    ''' (Deprecated) inner product of gradient of Q_ij and the surface normal of all the points in the mesh '''
-    # surface normal = normalized r field (shape = 27 * 27 * 17)
-    grad_Q = np.empty((p.x_nog, p.y_nog, p.z_nog))
-    for x in range(p.x_nog):
-        for y in range(p.y_nog):
-            for z in range(p.z_nog):
-                normal = np.array((x, y, z)) / np.linalg.norm(normal)
-                grad_Q[x, y, z] = sum(normal[0] * (Qs[i, j, x, y, z] - Qs[i, j, x-1, y, z]) / dr,
-                                     normal[1] * (Qs[i, j, x, y, z] - Qs[i, j, x, y-1, z]) / dr,
-                                     normal[2] * (Qs[i, j, x, y, z] - Qs[i, j, x, y, z-1]) / dr)
-    return grad_Q   # shape = (27, 27, 17)
 
 def laplacian(mesh):
     ''' finite difference discrete laplacian of Q_ij of all the points in the mesh '''
@@ -183,11 +136,13 @@ def evolute(mesh, L=p.L, A=p.A, B=p.B, C=p.C, W_subs=p.W_sub, W_shel=p.W_she, dt
                 newQ = grid.Q + grid.h * dt / gamma
                 newQ -= np.trace(newQ) * np.eye(3) / 3     # EL modification
 
-                symmetric = (abs(np.transpose(newQ) - newQ) <= np.full((3, 3), 2e-8)).all()
+                symmetric = (abs(np.transpose(newQ) - newQ) <= np.full((3, 3), 2e-7)).all()
+                traceless = abs(np.trace(newQ)) <= 1e-15
                 if not symmetric:
-                    print(f'\nnewQ =\n{newQ}\n')
-                    print(f'\nnp.transpose(newQ) =\n{np.transpose(newQ)}\n')
-                    print(f'\nnewQ - np.transpose(newQ) =\n{newQ - np.transpose(newQ)}\n')
+                    print(f'max asymmetry = {np.max(newQ - np.transpose(newQ))}\n')
+                    # print(f'\nnewQ =\n{newQ}\n')
+                    # print(f'\nnp.transpose(newQ) =\n{np.transpose(newQ)}\n')
+                    # print(f'\nnewQ - np.transpose(newQ) =\n{newQ - np.transpose(newQ)}\n')
                 
                 grid.Q = newQ
 

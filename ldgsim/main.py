@@ -18,6 +18,12 @@ def clear():
     else:
        os.system('clear')
 
+def timeformat(t):
+    hour = int(t // 3600)
+    minute = int((t - 3600 * hour) // 60)
+    second = t - 3600 * hour - 60 * minute
+    return hour, minute, second
+
 def main():
     # generate the meshgrid
     mesh = m.mesh_gen()
@@ -28,12 +34,14 @@ def main():
     
     # numerical iteration
     s.all_Q(mesh)
-    t = time.time()
+    t1 = time.time()
     for i in range(int(p.t_total / p.dt)):
+        t2 = time.time()
+        # hour, minute, second = timeformat(t2 - t1)
         if len(sys.argv) > 1:
             clear()
-        print(f'progress: {100 * i * p.dt / p.t_total: .5f} %', end='\t')
-        print(f'time: {time.time() - t: .4f} s')
+        print(f'progress: {100 * i * p.dt / p.t_total:.5f} %', end='\t')
+        print(f'time: {t2 - t1:.4f} sec')
         s.evolute(mesh)
     s.Eigen(mesh)
 

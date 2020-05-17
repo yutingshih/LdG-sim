@@ -154,15 +154,3 @@ if __name__ == "__main__":
     print(b)
     c = np.sum(np.multiply(a, b), axis=0)
     print(c)
-
-# TODO: XZ-periodic boundary
-
-'''
-# XZ-periodic boundary
-
-F_bulk = 
-F_subs = 
-F_shel = 
-F_total = F_bulk + F_subs + F_shel
-
-'''

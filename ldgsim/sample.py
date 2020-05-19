@@ -1,5 +1,6 @@
 import numpy as np
 import os, sys, time
+from datetime import datetime
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from ldgsim import param as p
@@ -49,7 +50,7 @@ class LCSample(object):
 			raise ValueError(f'assign P with invalid value {value}, not in [-1.5, 1.5]')
 		self._P[i, j, k] = value
 	
-	def n(self, i, j, k, value):
+	def setn(self, i, j, k, value):
 		if not 2 <= len(value) <= 3:
 			raise ValueError('n is not 3 dimensional')
 		self._n[i, j, k] = np.array(value) / np.linalg.norm(value)
@@ -73,11 +74,28 @@ class LCSample(object):
 			raise ValueError('h is not 3 dimensional')
 		self._h[i, j, k] = value
 	
+	def save(self, prefix='data/LCsim'):
+		path = prefix + datetime.now().strftime("_%y%m%d_%H%M%S") + '.txt'
+		size = ','.join(str(i) for i in self.P.shape)
+		S = self.S.serialize()
+		n = self.S.serialize()
+		Q = self.Q.serialize()
+		with open(path, 'w') as file:
+			file.write(f'{size}\n{S}\n{n}\n{Q}\n')
+	
+	def load(self, path):
+		data = []
+		with open(path, 'r') as file:
+			data = file.readlines()
+		print(f'path: {path}')
+		self._S = np.array([float(i) for i in data[1].split()[0].split(',')])
+		self._n = np.array([float(i) for i in data[2].split()[0].split(',')])
+		self._Q = np.array([float(i) for i in data[3].split()[0].split(',')])
+		
 if __name__ == "__main__":
 	t = time.time()
 	lc = LCSample()
-	print(lc.P[3, 3, 3])
-	lc.setP(3, 3, 3, 3.2)
-	print(lc.P[3, 3, 3])
-	print(f'')
+	lc.save()
+	path = 'data/' + os.listdir('data')[-1]
+	lc.load(path)
 	print(f'time: {time.time() - t:.4f} s')

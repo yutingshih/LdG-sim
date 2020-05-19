@@ -11,12 +11,46 @@ class ScalarField(np.ndarray):
 			raise ValueError(f'ScalarField has invalid shape, {data.shape}')
 		return data.view(cls)
 	
+	def show(self):
+		for i in range(self.shape[0]):
+			for j in range(self.shape[1]):
+				for k in range(self.shape[2]):
+					print(f'{self[i, j, k]}', end=' ')
+				print()
+			print()
+	
+	def serialize(self):
+		serial = str(self.flatten()[0])
+		for i in self.flatten():
+			serial += ',' + str(i)
+		return serial
+
+	def unserialize(self):
+		pass
+	
 class VectorField(np.ndarray):
 	def __new__(cls, data, mesh_shape=(param.x_nog, param.y_nog, param.z_nog)):
 		data = np.asarray(data)
 		if data.shape != (*mesh_shape, 3):
 			raise ValueError(f'VectorField has invalid shape, {data.shape}')
 		return data.view(cls)
+	
+	def rotate(self):
+		pass
+	
+	def show(self):
+		for i in range(self.shape[0]):
+			for j in range(self.shape[1]):
+				for k in range(self.shape[2]):
+					print(f'{self[i, j, k]}', end=' ')
+				print()
+			print()
+	
+	def serialize(self):
+		serial = str(self.flatten()[0])
+		for i in self.flatten():
+			serial += ',' + str(i)
+		return serial
 
 class MatrixField(np.ndarray):
 	def __new__(cls, data, mesh_shape=(param.x_nog, param.y_nog, param.z_nog)):
@@ -25,9 +59,9 @@ class MatrixField(np.ndarray):
 			raise ValueError(f'MatrixField has invalid shape, {data.shape}')
 		return data.view(cls)
 	
-	def getSymmetry(self):
-		symmetry = np.absolute(self - self.transpose(0, -1, -2)).max(axis=(-1, -2))
-		return symmetry	# shape (27, 27, 17)
+	def getAsymmetry(self):
+		asymmetry = np.absolute(self - self.transpose(0, -1, -2)).max(axis=(-1, -2))
+		return asymmetry	# shape (27, 27, 17)
 	
 	def symmetric(self):
 		return (self - self.transpose(0, -1, -2)).all()
@@ -37,11 +71,36 @@ class MatrixField(np.ndarray):
 	
 	def traceless(self):
 		return not self.trace(axis1=-2, axis2=-1).any()
+	
+	def laplacian(self):
+		pass
 
-if __name__ == "__main__":
+	def gradient(self):
+		pass
+	
+	def show(self):
+		for i in range(self.shape[0]):
+			for j in range(self.shape[1]):
+				for k in range(self.shape[2]):
+					print(f'{self[i, j, k]}', end=' ')
+				print()
+			print()
+	
+	def serialize(self):
+		serial = str(self.flatten()[0])
+		for i in self.flatten():
+			serial += ',' + str(i)
+		return serial
+
+def testMatrix():
 	a = MatrixField([[[0, 0, 0], [1, 0, 1], [1, 1, 0]],
 				    [[0, 2, 2], [2, 0, 2], [2, 2, 0]],
 					[[0, 2, 2], [2, 0, 2], [2, 2, 0]]], (3,))
 	print(a, end='\n\n')
 	print(f'symmetric: {a.getSymmetry()}\t{a.symmetric()}')
 	print(f'traceless: {a.getTrace()}\t{a.traceless()}')
+
+if __name__ == "__main__":
+	data = np.random.randn(3, 3, 3, 3, 3)
+	sf = MatrixField(data, data.shape[:3])
+	print(sf.serialize())

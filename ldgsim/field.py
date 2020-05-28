@@ -1,17 +1,17 @@
 import numpy as np
 import os, sys
 
-# sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from ldgsim import param
+# sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from ldgsim import param as prm
 
 class ScalarField(np.ndarray):
-	def __new__(cls, data, mesh_shape=(param.x_nog, param.y_nog, param.z_nog)):
+	def __new__(cls, data, mesh_shape=(prm.x_nog, prm.y_nog, prm.z_nog)):
 		data = np.asarray(data)
 		if data.shape != mesh_shape:
 			raise ValueError(f'ScalarField has invalid shape, {data.shape}')
 		return data.view(cls)
 	
-	def show(self):
+	def display(self):
 		for i in range(self.shape[0]):
 			for j in range(self.shape[1]):
 				for k in range(self.shape[2]):
@@ -24,12 +24,9 @@ class ScalarField(np.ndarray):
 		for i in self.flatten():
 			serial += ',' + str(i)
 		return serial
-
-	def unserialize(self):
-		pass
 	
 class VectorField(np.ndarray):
-	def __new__(cls, data, mesh_shape=(param.x_nog, param.y_nog, param.z_nog)):
+	def __new__(cls, data, mesh_shape=(prm.x_nog, prm.y_nog, prm.z_nog)):
 		data = np.asarray(data)
 		if data.shape != (*mesh_shape, 3):
 			raise ValueError(f'VectorField has invalid shape, {data.shape}')
@@ -38,7 +35,7 @@ class VectorField(np.ndarray):
 	def rotate(self):
 		pass
 	
-	def show(self):
+	def display(self):
 		for i in range(self.shape[0]):
 			for j in range(self.shape[1]):
 				for k in range(self.shape[2]):
@@ -53,7 +50,7 @@ class VectorField(np.ndarray):
 		return serial
 
 class MatrixField(np.ndarray):
-	def __new__(cls, data, mesh_shape=(param.x_nog, param.y_nog, param.z_nog)):
+	def __new__(cls, data, mesh_shape=(prm.x_nog, prm.y_nog, prm.z_nog)):
 		data = np.asarray(data, dtype=float)
 		if data.shape != (*mesh_shape, 3, 3):
 			raise ValueError(f'MatrixField has invalid shape, {data.shape}')
@@ -78,7 +75,7 @@ class MatrixField(np.ndarray):
 	def gradient(self):
 		pass
 	
-	def show(self):
+	def display(self):
 		for i in range(self.shape[0]):
 			for j in range(self.shape[1]):
 				for k in range(self.shape[2]):

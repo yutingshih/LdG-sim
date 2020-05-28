@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-import sys, os, time
+import sys, os, time, datetime
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from ldgsim import utility as u
@@ -12,19 +12,23 @@ from ldgsim import cond as c
 from ldgsim import solver as s
 from ldgsim import output as o
 
+from ldgsim import liqCrystal as LC
+from ldgsim import visual as vis
+
 def clear():
     if os.name == 'nt':
        os.system('cls')
     else:
        os.system('clear')
 
-def timeformat(t):
-    hour = int(t // 3600)
-    minute = int((t - 3600 * hour) // 60)
-    second = t - 3600 * hour - 60 * minute
-    return hour, minute, second
-
 def main():
+    sample = LC.LCSample()
+    for i in range(10):
+        vis.plot(vis.randomLC())
+        vis.save('image/test')
+    # plt.show()
+
+def main_():
     # generate the meshgrid
     mesh = m.mesh_gen()
 
@@ -37,7 +41,6 @@ def main():
     t1 = time.time()
     for i in range(int(p.t_total / p.dt)):
         t2 = time.time()
-        # hour, minute, second = timeformat(t2 - t1)
         if len(sys.argv) > 1:
             clear()
         print(f'progress: {100 * i * p.dt / p.t_total:.5f} %', end='\t')

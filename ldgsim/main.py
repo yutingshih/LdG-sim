@@ -22,11 +22,17 @@ def clear():
        os.system('clear')
 
 def main():
-    sample = LC.LCSample()
-    for i in range(10):
-        vis.plot(vis.randomLC())
-        vis.save('image/test')
-    # plt.show()
+    # LC sample initialization
+    sample = LC.randomLC()
+    
+    # set initial condition and boundary condition
+    
+    # numerical iteration and visualization
+    for i in range(int(p.t_total / p.dt)):
+        vis.plot(sample)
+        vis.save()
+        plt.show()
+        break
 
 def main_():
     # generate the meshgrid
@@ -58,4 +64,5 @@ def main_():
 
 
 if __name__ == '__main__':
+    sys.argv
     main()

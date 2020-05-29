@@ -2,12 +2,12 @@ import numpy as np
 import os, sys, time
 from datetime import datetime
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from ldgsim import param as p
 from ldgsim import field
 
 class LCSample(object):
-	def __init__(self, mesh_shape=(p.x_nog, p.y_nog, p.z_nog), 
+	def __init__(self, mesh_shape=p.mesh_shape, 
 				orientation=np.random.randn(3), order_degree=0.5, biaxiality=0):
 
 		self._S = field.ScalarField(np.ones(mesh_shape) * order_degree)
@@ -17,10 +17,10 @@ class LCSample(object):
 		self._Q = field.MatrixField(np.empty((*mesh_shape, 3, 3)))
 		self._h = field.MatrixField(np.empty((*mesh_shape, 3, 3)))
 
-		for i in range(p.x_nog):
+		for i in range(p.z_nog):
 			for j in range(p.y_nog):
-				for k in range(p.z_nog):
-					self._r[i, j, k] = np.asarray([p.axis_x[i], p.axis_y[j], p.axis_z[k]])
+				for k in range(p.x_nog):
+					self._r[i, j, k] = np.asarray([p.axis_z[i], p.axis_y[j], p.axis_x[k]])
 
 	@property
 	def r(self): return self._r
@@ -35,10 +35,63 @@ class LCSample(object):
 	@property
 	def h(self): return self._h
 
-	def laplacian(self):
-		pass
-	def gradient(self):
-		pass
+	@n.setter
+	def n(self, value):
+		array = np.asarray(value)
+		if array.shape == (3,):
+			self._n[..., :] = array[:]
+		elif array.shape == self.n.shape:
+			self._n = array
+		else:
+			raise ValueError(f'assign n with invalid shape {value.shape}')
+	
+	@S.setter
+	def S(self, value):
+		ub, lb = -0.5, 1
+		array = np.asarray(value)
+		if array.shape == ():
+			if not lb <= value <= ub:
+				raise ValueError(f'assign S with invalid value {value}, not in {[lb, ub]}')
+			self._S[...] = value
+		elif array.shape == (1,):
+			if not lb <= value[0] <= ub:
+				raise ValueError(f'assign S with invalid value {value[0]}, not in {[lb, ub]}')
+			self._S[...] = value[0]
+		elif array.shape == self.S.shape:
+			if (array < lb).any() or (array > ub).any():
+				raise ValueError(f'assign S with invalid array, not in {[lb, ub]}')
+			self._S = field.ScalarField(array)
+		else:
+			raise ValueError(f'assign S with invalid shape {value.shape}')
+	
+	@P.setter
+	def P(self, value):
+		ub, lb = -1.5, 1.5
+		array = np.asarray(value)
+		if array.shape == ():
+			if not lb <= value <= ub:
+				raise ValueError(f'assign P with invalid value {value}, not in {[lb, ub]}')
+			self._P[...] = value
+		elif array.shape == (1,):
+			if not lb <= value[0] <= ub:
+				raise ValueError(f'assign P with invalid value {value[0]}, not in {[lb, ub]}')
+			self._P[...] = value[0]
+		elif array.shape == self.S.shape:
+			if (array < lb).any() or (array > ub).any():
+				raise ValueError(f'assign P with invalid array, not in {[lb, ub]}')
+			self._P = field.ScalarField(array)
+		else:
+			raise ValueError(f'assign P with invalid shape {value.shape}')
+	
+	@Q.setter
+	def Q(self, value):
+		array = np.asarray(value)
+		if array.shape == (3, 3):
+			self._Q[..., :, :] = array[:, :]
+		elif self.Q.shape == array.shape:
+			self._Q = array
+		else:
+			raise ValueError(f'assign Q with invalid shape {value.shape}')
 	
 	def setS(self, i, j, k, value):
 		if not -0.5 <= value <= 1:
@@ -74,8 +127,14 @@ class LCSample(object):
 			raise ValueError('h is not 3 dimensional')
 		self._h[i, j, k] = value
 	
-	def save(self, prefix='data/LCsim'):
-		path = prefix + datetime.now().strftime("_%y%m%d_%H%M%S") + '.txt'
+	def laplacian(self):
+		pass
+	def gradient(self):
+		pass
+	
+	def save(self, prefix='data'):
+		os.makedirs(prefix, exist_ok=True)
+		path = os.path.join(prefix, datetime.now().strftime("LC_%y%m%d_%H%M%S_%f.txt"))
 		size = ','.join(str(i) for i in self.P.shape)
 		S = self.S.serialize()
 		n = self.S.serialize()
@@ -87,15 +146,21 @@ class LCSample(object):
 		data = []
 		with open(path, 'r') as file:
 			data = file.readlines()
-		print(f'path: {path}')
 		self._S = np.array([float(i) for i in data[1].split()[0].split(',')])
 		self._n = np.array([float(i) for i in data[2].split()[0].split(',')])
 		self._Q = np.array([float(i) for i in data[3].split()[0].split(',')])
-		
+
+def randomLC(lc=LCSample()):
+	''' generate LC sample of random S and n for testing '''
+	lc._S = np.random.randn(*lc.S.shape)	# standard normal distribution
+	lc._n = np.random.randn(*lc.n.shape)	# standard normal distribution
+	return lc
+
 if __name__ == "__main__":
 	t = time.time()
 	lc = LCSample()
 	lc.save()
 	path = 'data/' + os.listdir('data')[-1]
 	lc.load(path)
+	print(f'path: {path}')
 	print(f'time: {time.time() - t:.4f} s')

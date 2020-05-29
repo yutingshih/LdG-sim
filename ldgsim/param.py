@@ -41,6 +41,7 @@ x_nog = round(x_real / dr)	# number of grids on x dimension (nog = 27)
 y_nog = round(y_real / dr)	# number of grids on y dimension (nog = 27)
 z_nog = round(z_real / dr)	# number of grids on z dimension (nog = 17)
 r_nog = round(r_real / dr)  # radius of shpere (unit: number of grids) (nog = 7)
+mesh_shape = (z_nog, y_nog, x_nog)
 
 """ mesh """
 dx = dy = dz = 1
@@ -48,6 +49,7 @@ dx = dy = dz = 1
 axis_x = np.arange(-x_nog/2+0.5, x_nog/2+0.5, dx)		# (-13 to 13)
 axis_y = np.arange(-y_nog/2+0.5, y_nog/2+0.5, dy)		# (-13 to 13)
 axis_z = np.arange(-z_nog/2+0.5, z_nog/2+0.5, dz)		# ( -8 to  8)
+axis = (axis_z, axis_y, axis_x)
 
 """ initial and boundary conditions """
 S_subs = 0.9

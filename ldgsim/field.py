@@ -5,7 +5,7 @@ import os, sys
 from ldgsim import param as prm
 
 class ScalarField(np.ndarray):
-	def __new__(cls, data, mesh_shape=(prm.x_nog, prm.y_nog, prm.z_nog)):
+	def __new__(cls, data, mesh_shape=prm.mesh_shape):
 		data = np.asarray(data)
 		if data.shape != mesh_shape:
 			raise ValueError(f'ScalarField has invalid shape, {data.shape}')
@@ -26,14 +26,11 @@ class ScalarField(np.ndarray):
 		return serial
 	
 class VectorField(np.ndarray):
-	def __new__(cls, data, mesh_shape=(prm.x_nog, prm.y_nog, prm.z_nog)):
+	def __new__(cls, data, mesh_shape=prm.mesh_shape):
 		data = np.asarray(data)
 		if data.shape != (*mesh_shape, 3):
 			raise ValueError(f'VectorField has invalid shape, {data.shape}')
 		return data.view(cls)
-	
-	def rotate(self):
-		pass
 	
 	def display(self):
 		for i in range(self.shape[0]):
@@ -50,7 +47,7 @@ class VectorField(np.ndarray):
 		return serial
 
 class MatrixField(np.ndarray):
-	def __new__(cls, data, mesh_shape=(prm.x_nog, prm.y_nog, prm.z_nog)):
+	def __new__(cls, data, mesh_shape=prm.mesh_shape):
 		data = np.asarray(data, dtype=float)
 		if data.shape != (*mesh_shape, 3, 3):
 			raise ValueError(f'MatrixField has invalid shape, {data.shape}')

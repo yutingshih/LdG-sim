@@ -3,7 +3,9 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 import sys, os, time, datetime
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+import_path = os.path.join(os.path.dirname(__file__), '..')
+if import_path not in sys.path:
+	sys.path.append(import_path)
 
 from ldgsim import utility as u
 from ldgsim import param as p

@@ -1,7 +1,10 @@
 import numpy as np
 import os, sys
 
-# sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+import_path = os.path.join(os.path.dirname(__file__), '..')
+if import_path not in sys.path:
+	sys.path.append(import_path)
+
 from ldgsim import param as prm
 
 class ScalarField(np.ndarray):

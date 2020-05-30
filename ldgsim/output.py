@@ -1,7 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-import json
+import json, os, sys
+
+import_path = os.path.join(os.path.dirname(__file__), '..')
+if import_path not in sys.path:
+	sys.path.append(import_path)
 
 from ldgsim import param as p
 from ldgsim import mesh as m

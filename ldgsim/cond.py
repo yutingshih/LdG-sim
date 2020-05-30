@@ -1,4 +1,8 @@
 import numpy as np
+import os, sys
+import_path = os.path.join(os.path.dirname(__file__), '..')
+if import_path not in sys.path:
+	sys.path.append(import_path)
 
 from ldgsim import utility as u
 from ldgsim import param as p

@@ -2,12 +2,15 @@ import numpy as np
 import os, sys, time
 from datetime import datetime
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from ldgsim import param as p
+import_path = os.path.join(os.path.dirname(__file__), '..')
+if import_path not in sys.path:
+	sys.path.append(import_path)
+
+from ldgsim import param as prm
 from ldgsim import field
 
 class LCSample(object):
-	def __init__(self, mesh_shape=p.mesh_shape, 
+	def __init__(self, mesh_shape=prm.mesh_shape, 
 				orientation=np.random.randn(3), order_degree=0.5, biaxiality=0):
 
 		self._S = field.ScalarField(np.ones(mesh_shape) * order_degree)
@@ -17,10 +20,10 @@ class LCSample(object):
 		self._Q = field.MatrixField(np.empty((*mesh_shape, 3, 3)))
 		self._h = field.MatrixField(np.empty((*mesh_shape, 3, 3)))
 
-		for i in range(p.z_nog):
-			for j in range(p.y_nog):
-				for k in range(p.x_nog):
-					self._r[i, j, k] = np.asarray([p.axis_z[i], p.axis_y[j], p.axis_x[k]])
+		for i in range(prm.z_nog):
+			for j in range(prm.y_nog):
+				for k in range(prm.x_nog):
+					self._r[i, j, k] = np.asarray([prm.axis_z[i], prm.axis_y[j], prm.axis_x[k]])
 
 	@property
 	def r(self): return self._r
@@ -38,10 +41,8 @@ class LCSample(object):
 	@n.setter
 	def n(self, value):
 		array = np.asarray(value)
-		if array.shape == (3,):
-			self._n[..., :] = array[:]
-		elif array.shape == self.n.shape:
-			self._n = array
+		if array.shape == (3,) or array.shape == self.n.shape:
+			self._n[:] = array
 		else:
 			raise ValueError(f'assign n with invalid shape {value.shape}')
 	
@@ -52,15 +53,15 @@ class LCSample(object):
 		if array.shape == ():
 			if not lb <= value <= ub:
 				raise ValueError(f'assign S with invalid value {value}, not in {[lb, ub]}')
-			self._S[...] = value
+			self._S[:] = value
 		elif array.shape == (1,):
 			if not lb <= value[0] <= ub:
 				raise ValueError(f'assign S with invalid value {value[0]}, not in {[lb, ub]}')
-			self._S[...] = value[0]
+			self._S[:] = value[0]
 		elif array.shape == self.S.shape:
 			if (array < lb).any() or (array > ub).any():
 				raise ValueError(f'assign S with invalid array, not in {[lb, ub]}')
-			self._S = field.ScalarField(array)
+			self._S[:] = array
 		else:
 			raise ValueError(f'assign S with invalid shape {value.shape}')
 	
@@ -71,15 +72,15 @@ class LCSample(object):
 		if array.shape == ():
 			if not lb <= value <= ub:
 				raise ValueError(f'assign P with invalid value {value}, not in {[lb, ub]}')
-			self._P[...] = value
+			self._P[:] = value
 		elif array.shape == (1,):
 			if not lb <= value[0] <= ub:
 				raise ValueError(f'assign P with invalid value {value[0]}, not in {[lb, ub]}')
-			self._P[...] = value[0]
+			self._P[:] = value[0]
 		elif array.shape == self.S.shape:
 			if (array < lb).any() or (array > ub).any():
 				raise ValueError(f'assign P with invalid array, not in {[lb, ub]}')
-			self._P = field.ScalarField(array)
+			self._P[:] = array
 		else:
 			raise ValueError(f'assign P with invalid shape {value.shape}')
 	
@@ -87,9 +88,17 @@ class LCSample(object):
 	def Q(self, value):
 		array = np.asarray(value)
 		if array.shape == (3, 3):
-			self._Q[..., :, :] = array[:, :]
+			if array - array.transpose():
+				raise ValueError('Q is not symmetric')
+			elif array.trace():
+				raise ValueError('Q is not traceless', np.trace(value))
+			self._Q[:] = array
 		elif self.Q.shape == array.shape:
-			self._Q = array
+			if not (array - array.transpose(0, -1, -2)).all():	# not symmetric
+				raise ValueError('Q is not symmetric')
+			elif self.trace(axis1=-2, axis2=-1).any():	# not traceless
+				raise ValueError('Q is not traceless')
+			self._Q[:] = array
 		else:
 			raise ValueError(f'assign Q with invalid shape {value.shape}')
 	

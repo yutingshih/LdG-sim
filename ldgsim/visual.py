@@ -2,8 +2,11 @@ import numpy as np
 import os, sys, time, datetime
 from matplotlib import pyplot as plt, ticker as tk
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from ldgsim import param
+import_path = os.path.join(os.path.dirname(__file__), '..')
+if import_path not in sys.path:
+	sys.path.append(import_path)
+
+from ldgsim import param as prm
 from ldgsim import liqCrystal as LC
 
 def contourMap(axes, data, label=(), locator=(4, 2)):
@@ -29,23 +32,23 @@ def streamline(axes, data, label=(), locator=(4, 2)):
 	axes.yaxis.set_minor_locator(tk.MultipleLocator(locator[1]))
 
 def plot(lc=LC.LCSample(), z_layer=0, x_layer=0):
-	''' plot 2D figures of contour maps and streamline patterns '''
-	X, Y, Z = param.axis_x, param.axis_y, param.axis_z
+	''' plot 2D figures of contour maps and streamline patterns on xy-plane and yz-plane '''
+	X, Y, Z = prm.axis_x, prm.axis_y, prm.axis_z
 	S = lc.S
-	nx = lc.n[:, :, :, 0]
-	ny = lc.n[:, :, :, 1]
-	nz = lc.n[:, :, :, 2]
+	nx = lc.n[..., 0]
+	ny = lc.n[..., 1]
+	nz = lc.n[..., 2]
 	
 	fig, axes = plt.subplots(2, 2, figsize=(10, 10))
-	contourMap(axes[0, 0], (X, Y, S[z_layer, :, :]))
-	contourMap(axes[1, 0], (Y, Z, S[:, :, x_layer]))
-	streamline(axes[0, 1], (X, Y, nx[z_layer, :, :], ny[z_layer, :, :]))
-	streamline(axes[1, 1], (Y, Z, ny[:, :, x_layer], nz[:, :, x_layer]))
+	contourMap(axes[0, 0], (X, Y, S[z_layer, ...]))
+	contourMap(axes[1, 0], (Y, Z, S[..., x_layer]))
+	streamline(axes[0, 1], (X, Y, nx[z_layer, ...], ny[z_layer, ...]))
+	streamline(axes[1, 1], (Y, Z, ny[..., x_layer], nz[..., x_layer]))
 
 	axes[0, 0].set_title('contour of S on xy-plane (300 nm per grids)', fontsize=12)
-	axes[1, 0].set_title('contour of S on zy-plane (300 nm per grids)', fontsize=12)
+	axes[1, 0].set_title('contour of S on yz-plane (300 nm per grids)', fontsize=12)
 	axes[0, 1].set_title("streamline of $\\vec{n}$ on xy-plane (300 nm per grids)", fontsize=12)
-	axes[1, 1].set_title("streamline of $\\vec{n}$ on zy-plane (300 nm per grids)", fontsize=12)
+	axes[1, 1].set_title("streamline of $\\vec{n}$ on yz-plane (300 nm per grids)", fontsize=12)
 
 def save(prefix='image/test', show_path=False):
 	''' save 2D figures of contour maps and streamline patterns '''

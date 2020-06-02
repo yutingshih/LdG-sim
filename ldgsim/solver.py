@@ -56,9 +56,10 @@ def tensor_Q(n, S=1, P=0):
 
 def eigen(grid):
     ''' find the max eigenvalue and the corresponding normalized eigvector of Q '''
-    eig_values, eig_vectors = np.linalg.eig(grid.Q)
-    S = np.amax(eig_values)
-    n = eig_vectors[:, np.where(eig_values == np.amax(eig_values)[0][0])]
+    eigval, eigvec = np.linalg.eig(grid.Q)
+    idx = np.argmax(eigval)
+    S = eigval[idx]
+    n = eigvec[:, idx]
     grid.S = S
     grid.n = n
     return S, n

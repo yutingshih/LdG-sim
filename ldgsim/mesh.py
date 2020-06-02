@@ -78,8 +78,8 @@ class Grid(object):
     @Q.setter
     def Q(self, value):
         three_dim = (np.array(value.shape) == (3, 3)).all()
-        symmetric = (abs(np.transpose(value) - value) <= np.full((3, 3), 2e-7)).all()
-        traceless = abs(np.trace(value)) <= 1e-15
+        symmetric = (abs(np.transpose(value) - value) <= np.full((3, 3), p.asymm_th)).all()
+        traceless = abs(np.trace(value)) <= p.trace_th
         
         if not three_dim:
             raise ValueError('Q is not 3 dimensional')
@@ -89,6 +89,7 @@ class Grid(object):
             raise ValueError('Q is not traceless', np.trace(value))
         else:
             self._Q = value
+        self._Q = value
 
     @h.setter
     def h(self, value):

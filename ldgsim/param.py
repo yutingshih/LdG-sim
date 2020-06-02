@@ -34,7 +34,7 @@ W_she = 1e-1
 dr_lap = 1e-7
 
 """ steps per update (50 result only, 500000 real time monitor) """
-spu = 50
+spu = int(3)
 
 """ dimensions """
 x_nog = round(x_real / dr)	# number of grids on x dimension (nog = 27)
@@ -56,5 +56,9 @@ S_init = 0.5
 n_subs = [1, 0, 0]
 n_shel = [1, 0, 0]
 n_bias = [1, 0, 0]
+
+""" numerical iteration thresholds """
+asymm_th = 2e-6
+trace_th = 1e-15
 
 """ end """

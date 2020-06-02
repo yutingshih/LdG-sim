@@ -11,6 +11,7 @@ git clone https://github.com/tings0802/LdG-sim.git
 - Python 3.6 or later
 - Numpy
 - Matplotlib
+- Scipy
 
 After cloning the LdG-sim repository, you can use the following command to install the packages of dependencies.  
 

@@ -11,10 +11,9 @@ z_real = 5000
 r_real = 2000       # radius (nm) of shpere (i.e. origin of meshgrid)
 
 """ temporal parameters """
-dt = 3e-7			# temporal resolution
-t_total = 3	 		# total time
-nsteps = int(t_total / dt)
-gamma = 1	    	# relaxation coefficient
+dt = 3e-7		# temporal resolution
+t_total = 3	 	# total time
+gamma = 1	    # relaxation coefficient
 
 """ initial orientaion (azimuthal, elevation) """
 n_init = [(45 * np.pi / 180), 0]
@@ -28,15 +27,14 @@ C = 1.73e6
 L = 4e-9
 
 """ substrate & shell anchoring (unit: Jm^-2) """
-W_subs = 1e0
-W_shel = 1e-1
+W_sub = 1e0
+W_she = 1e-1
 
 """ Laplacian spacing """
 dr_lap = 1e-7
 
 """ steps per update (50 result only, 500000 real time monitor) """
 spu = 50
-plot_rate = int(5e5)
 
 """ dimensions """
 x_nog = round(x_real / dr)	# number of grids on x dimension (nog = 27)
@@ -60,11 +58,5 @@ S_init = 0.5
 n_subs = [1, 0, 0]
 n_shel = [1, 0, 0]
 n_bias = [1, 0, 0]
-
-""" thresholds """
-asym_th = 6.5
-trace_th = 2e-2
-asym_th = 1e-100
-trace_th = 1e-100
 
 """ end """

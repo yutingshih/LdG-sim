@@ -7,7 +7,7 @@ import_path = os.path.join(os.path.dirname(__file__), '..')
 if import_path not in sys.path:
 	sys.path.append(import_path)
 
-from ldgsim import param as p
+from ldgsim import param_ as p
 from ldgsim import mesh as m
 from ldgsim import cond as c
 

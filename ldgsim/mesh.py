@@ -5,7 +5,7 @@ if import_path not in sys.path:
 	sys.path.append(import_path)
 
 from ldgsim import utility as u
-from ldgsim import param as p
+from ldgsim import param_ as p
 
 ''' mesh (object) '''
 class Grid(object):

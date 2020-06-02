@@ -5,7 +5,7 @@ if import_path not in sys.path:
 	sys.path.append(import_path)
 
 from ldgsim import utility as u
-from ldgsim import param as p
+from ldgsim import param_ as p
 from ldgsim import mesh as m
 
 """ grid selectors """
@@ -62,6 +62,5 @@ def reorder(grid, S_subs=p.S_subs, S_cent=p.S_cent, S_init=p.S_init):
 	# 	grid.S = S_cent
 	# else:
 	# 	grid.S = S_init
-	grid.S = S_init
-	
+	grid.S = S_init	
 Reorder = np.vectorize(reorder)

@@ -1,6 +1,7 @@
-import numpy as np
 import os, sys, time, datetime
+import numpy as np
 from matplotlib import pyplot as plt, ticker as tk
+from mpl_toolkits.mplot3d import Axes3D
 
 import_path = os.path.join(os.path.dirname(__file__), '..')
 if import_path not in sys.path:
@@ -9,27 +10,24 @@ if import_path not in sys.path:
 from ldgsim import param as prm
 from ldgsim import liqCrystal as LC
 
-def contourMap(axes, data, label=(), locator=(4, 2)):
-	''' plot a 2D contour map '''
-	axes.contour(*data)
+def figtext(axes, title='', label=(), locator=(4, 2), fontsize=12):
+	''' add title, axis labels, and locators onto the figure '''
 	if len(label) == 2:
-		axes.set_xlabel(label[0], fontsize=12)
-		axes.set_ylabel(label[1], fontsize=12)
+		axes.set_xlabel(label[0], fontsize=fontsize)
+		axes.set_ylabel(label[1], fontsize=fontsize)
+	axes.set_title(title, fontsize=fontsize)
 	axes.xaxis.set_major_locator(tk.MultipleLocator(locator[0]))
 	axes.xaxis.set_minor_locator(tk.MultipleLocator(locator[1]))
 	axes.yaxis.set_major_locator(tk.MultipleLocator(locator[0]))
 	axes.yaxis.set_minor_locator(tk.MultipleLocator(locator[1]))
 
-def streamline(axes, data, label=(), locator=(4, 2)):
+def contourMap(axes, data, title='', label=(), locator=(4, 2), fontsize=12):
+	''' plot a 2D contour map '''
+	axes.contour(*data)
+
+def streamline(axes, data, title='', label=(), locator=(4, 2), fontsize=12):
 	''' plot a 2D streamline pattern '''
 	axes.quiver(*data, pivot='mid')
-	if len(label) == 2:
-		axes.set_xlabel(label[0], fontsize=12)
-		axes.set_ylabel(label[1], fontsize=12)
-	axes.xaxis.set_major_locator(tk.MultipleLocator(locator[0]))
-	axes.xaxis.set_minor_locator(tk.MultipleLocator(locator[1]))
-	axes.yaxis.set_major_locator(tk.MultipleLocator(locator[0]))
-	axes.yaxis.set_minor_locator(tk.MultipleLocator(locator[1]))
 
 def plot(lc=LC.LCSample(), z_layer=0, x_layer=0):
 	''' plot 2D figures of contour maps and streamline patterns on xy-plane and yz-plane '''
@@ -45,10 +43,10 @@ def plot(lc=LC.LCSample(), z_layer=0, x_layer=0):
 	streamline(axes[0, 1], (X, Y, nx[z_layer, ...], ny[z_layer, ...]))
 	streamline(axes[1, 1], (Y, Z, ny[..., x_layer], nz[..., x_layer]))
 
-	axes[0, 0].set_title('contour of S on xy-plane (300 nm per grids)', fontsize=12)
-	axes[1, 0].set_title('contour of S on yz-plane (300 nm per grids)', fontsize=12)
-	axes[0, 1].set_title("streamline of $\\vec{n}$ on xy-plane (300 nm per grids)", fontsize=12)
-	axes[1, 1].set_title("streamline of $\\vec{n}$ on yz-plane (300 nm per grids)", fontsize=12)
+	figtext(axes[0, 0], title='contour of S on xy-plane (300 nm per grids)')
+	figtext(axes[1, 0], title='contour of S on yz-plane (300 nm per grids)')
+	figtext(axes[0, 1], title="streamline of $\\vec{n}$ on xy-plane (300 nm per grids)")
+	figtext(axes[1, 1], title="streamline of $\\vec{n}$ on yz-plane (300 nm per grids)")
 
 def save(prefix='image/test', show_path=False):
 	''' save 2D figures of contour maps and streamline patterns '''

@@ -96,18 +96,18 @@ class LCSample(object):
 			asymmetry = array - array.transpose(0, 1, 2, -1, -2) > prm.asym_th
 			nontraceless = np.trace(array, axis1=-2, axis2=-1) > prm.trace_th
 			
-			if asymmetry.any():	# not symmetric
+			if asymmetry.any():		# if not symmetric
 				num_asym = f'number of asymmetric Qs: {array[asymmetry].size}'
 				max_asym = f'max asymmetry: {np.max(array - array.transpose(0, 1, 2, -1, -2))}'
 				raise ValueError(f'Q is not symmetric\n{num_asym}\n{max_asym}')
-			elif nontraceless.any():	# not traceless
+			elif nontraceless.any():	# if not traceless
 				raise ValueError(f'Q is not traceless, max trace: {np.max(np.trace(array, axis1=-2, axis2=-1))}')
 			self._Q[:] = array
 		else:
 			raise ValueError(f'assign Q with invalid shape {value.shape}')
 	
 	def save(self, dir='data/test', prefix='LC'):
-		os.makedirs(prefix, exist_ok=True)
+		os.makedirs(dir, exist_ok=True)
 		path = os.path.join(dir, datetime.datetime.now().strftime(f'{prefix}_%y%m%d_%H%M%S_%f.txt'))
 		size = ','.join(str(i) for i in self.P.shape)
 		S = self.S.serialize()
@@ -218,7 +218,7 @@ def randomLC(lc=LCSample()):
 if __name__ == "__main__":
 	t = time.time()
 	lc = LCSample()
-	# lc.save()
+	lc.save()
 	path = lc.load()
 	print(f'path: {path}')
 	print(f'time: {time.time() - t:.4f} s')

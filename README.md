@@ -28,16 +28,16 @@ pip3 install -r requirements.txt
 
 
 ## Usage
-Navigate to the `LdG-sim/ldgsim/` folder, then execute the `main.py`.  
+Navigate to the `LdG-sim/` folder, then execute the `ldgsim/main.py`.  
 > please check that the Python executable has been added to the system environment variables
 
 #### Windows
 ```shell
-python main.py
+python ldgsim/main.py
 ```
 #### Linux/macOS
 ```shell
-python3 main.py
+python3 ldgsim/main.py
 ```
 
 <!-- ## Contributing -->

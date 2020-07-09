@@ -1,6 +1,5 @@
 import os, sys, time, datetime
 import numpy as np
-import scipy.ndimage as img
 
 import_path = os.path.join(os.path.dirname(__file__), '..')
 if import_path not in sys.path:

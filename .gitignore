@@ -1,4 +1,8 @@
 __pycache__/
 .vscode/
 *code-workspace
+*sublime-workspace
+*sublime-project
 test/
+*.o
+*.exe

@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -37,4 +39,4 @@ def main():
         break   # only run one step for test
 
 if __name__ == '__main__':
-    main() if len(sys.argv) == 1 else main_()
+    main()

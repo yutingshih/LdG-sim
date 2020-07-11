@@ -35,7 +35,6 @@ W_shel = 1e-1
 dr_lap = 1e-7
 
 """ steps per update (50 result only, 500000 real time monitor) """
-spu = 50
 plot_rate = int(5e5)
 
 """ dimensions """

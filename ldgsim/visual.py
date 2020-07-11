@@ -48,11 +48,11 @@ def plot(lc=LC.LCSample(), z_layer=0, x_layer=0):
 	figtext(axes[0, 1], title="streamline of $\\vec{n}$ on xy-plane (300 nm per grids)")
 	figtext(axes[1, 1], title="streamline of $\\vec{n}$ on yz-plane (300 nm per grids)")
 
-def save(prefix='image/test', show_path=False):
+def save(dir='image/test', prefix='LC', show_path=False):
 	''' save 2D figures of contour maps and streamline patterns '''
-	os.makedirs(prefix, exist_ok=True)
+	os.makedirs(dir, exist_ok=True)
 	now = datetime.datetime.now()
-	path = os.path.join(prefix, now.strftime('LC_%y%m%d_%H%M%S_%f.png'))
+	path = os.path.join(dir, now.strftime(prefix + '_%y%m%d_%H%M%S_%f.png'))
 	plt.savefig(path)
 	if show_path:
 		print(f'figure path: {path}')

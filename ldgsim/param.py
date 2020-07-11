@@ -35,7 +35,11 @@ W_shel = 1e-1
 dr_lap = 1e-7
 
 """ steps per update (50 result only, 500000 real time monitor) """
+<<<<<<< HEAD
 plot_rate = int(5e5)
+=======
+spu = int(3)
+>>>>>>> master
 
 """ dimensions """
 x_nog = round(x_real / dr)	# number of grids on x dimension (nog = 27)
@@ -60,10 +64,16 @@ n_subs = [1, 0, 0]
 n_shel = [1, 0, 0]
 n_bias = [1, 0, 0]
 
+<<<<<<< HEAD
 """ thresholds """
 asym_th = 6.5
 trace_th = 2e-2
 asym_th = 1e-100
 trace_th = 1e-100
+=======
+""" numerical iteration thresholds """
+asymm_th = 2e-6
+trace_th = 1e-15
+>>>>>>> master
 
 """ end """

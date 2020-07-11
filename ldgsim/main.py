@@ -13,11 +13,21 @@ from ldgsim import param as prm
 from ldgsim import liqCrystal as LC
 from ldgsim import visual as vis
 
-def clear():
-    if os.name == 'nt':
-       os.system('cls')
-    else:
-       os.system('clear')
+def eigen(grid):
+    ''' find the max eigenvalue and the corresponding normalized eigvector of Q '''
+    eigval, eigvec = np.linalg.eig(grid.Q)
+    idx = np.argmax(eigval)
+    S = eigval[idx]
+    n = eigvec[:, idx]
+    grid.S = S
+    grid.n = n
+    return grid
+
+def Eigen(mesh):
+    for i in range(p.x_nog):
+        for j in range(p.y_nog):
+            for k in range(p.z_nog):
+                mesh[i, j, k] = eigen(mesh[i, j, k])
 
 def main():
     # LC sample initialization
@@ -26,12 +36,33 @@ def main():
     # set initial condition and boundary condition
     sample.tensorialize()
     
+<<<<<<< HEAD
     # numerical iteration and visualization
     for i in range(prm.nsteps):
         sample.evolute()
 
         if i % prm.plot_rate == 0:
             sample.S, sample.n = sample.Q.eigen()
+=======
+    # numerical iteration
+    s.all_Q(mesh)
+    t = time.time()
+    for i in range(int(p.t_total / p.dt)):
+        print(f'progress: {100 * i * p.dt / p.t_total: .5f} %', end='\t')
+        print(f'time: {time.time() - t: .4f} s')
+        
+        s.evolute(mesh)
+
+        if i % p.spu == 0:
+            Eigen(mesh)
+            o.plot(mesh)
+            o.savefig()
+    
+    # 3D visualization
+    ax = plt.figure(figsize=[7, 7]).gca(projection='3d')
+    o.streamline(ax, mesh)  # draw orientaion n
+    plt.show()
+>>>>>>> master
 
             vis.plot(sample)
             vis.save()

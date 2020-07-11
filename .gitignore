@@ -1,8 +1,13 @@
 __pycache__/
 .vscode/
+<<<<<<< HEAD
 *code-workspace
 *sublime-workspace
 *sublime-project
 test/
 *.o
 *.exe
+=======
+*.code-workspace
+test/
+>>>>>>> master

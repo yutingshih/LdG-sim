@@ -1,16 +1,17 @@
+#!/usr/bin/python3
+
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-import sys, os, time
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+import os, sys, time, datetime
+import_path = os.path.join(os.path.dirname(__file__), '..')
+if import_path not in sys.path:
+	sys.path.append(import_path)
 
-from ldgsim import utility as u
-from ldgsim import param as p
-from ldgsim import mesh as m
-from ldgsim import cond as c
-from ldgsim import solver as s
-from ldgsim import output as o
+from ldgsim import param as prm
+from ldgsim import liqCrystal as LC
+from ldgsim import visual as vis
 
 def eigen(grid):
     ''' find the max eigenvalue and the corresponding normalized eigvector of Q '''
@@ -29,13 +30,20 @@ def Eigen(mesh):
                 mesh[i, j, k] = eigen(mesh[i, j, k])
 
 def main():
-    # generate the meshgrid
-    mesh = m.mesh_gen()
+    # LC sample initialization
+    sample = LC.LCSample()
 
     # set initial condition and boundary condition
-    c.Rotate(mesh)  # set orientation n
-    c.Reorder(mesh) # set degree of order S
+    sample.tensorialize()
     
+<<<<<<< HEAD
+    # numerical iteration and visualization
+    for i in range(prm.nsteps):
+        sample.evolute()
+
+        if i % prm.plot_rate == 0:
+            sample.S, sample.n = sample.Q.eigen()
+=======
     # numerical iteration
     s.all_Q(mesh)
     t = time.time()
@@ -54,7 +62,12 @@ def main():
     ax = plt.figure(figsize=[7, 7]).gca(projection='3d')
     o.streamline(ax, mesh)  # draw orientaion n
     plt.show()
+>>>>>>> master
 
+            vis.plot(sample)
+            vis.save()
+        
+        break   # only run one step for test
 
 if __name__ == '__main__':
     main()

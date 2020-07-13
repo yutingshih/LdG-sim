@@ -2,9 +2,9 @@
 
 SHELL = /bin/bash
 
-SRCDIR = ./src
-INCDIR = ./src
-OBJDIR = ./src
+SRCDIR = .
+INCDIR = .
+OBJDIR = .
 APPDIR = .
 
 SRC = $(wildcard $(SRCDIR)/*.c)
@@ -16,8 +16,7 @@ CFLAGS = -Wall -std=c99 -I$(INCDIR)
 
 .PHONY: all bench clean debug
 
-all: debug
-	./$(APP)
+all: bench
 
 debug: CFLAGS += -g -O0 -DDEBUG
 debug: $(APP)

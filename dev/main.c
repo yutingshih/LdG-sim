@@ -7,7 +7,7 @@ void printa(float* array, const int size, char* prompt);
 
 int main(void)
 {
-	const int size = 5;
+	const int size = 10;
 	float arr[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 	float* lap = laplace(arr, size);
 
@@ -20,25 +20,9 @@ int main(void)
 	return 0;
 }
 
-// periodic boundary
-//  3   4  |  0  1  2  3  4  |  0  1
-//  1   2  |  3  1  2  3  1  |  2  3
-// s-4 s-3 | s-2 1  2  3  1  |  2  3
-
-//  4   5  |  0  1  2  3  4  5  |  0  1
-//  2   3  |  4  1  2  3  4  1  |  2  3
-// s-4 s-3 | s-2 1  2  3  4  1  |  2  3
-
-//  5   6  |  0  1  2  3  4  5  6  |  0  1
-//  3   4  |  5  1  2  3  4  5  1  |  2  3
-// s-4 s-3 | s-2 1  2  3  4  5  1  |  2  3
-
 float* laplace(float* arr, int size)
 {
 	float* lap = farray(size);
-
-	arr[0] = arr[size - 2];
-	arr[size - 1] = arr[1];
 
 	for (int i = 0; i < size; i++)
 	{

@@ -44,12 +44,12 @@ function bench()
 		esac; shift;
 	done
 
-	printf "$name $(date +"%Y-%m-%d %H:%M:%S")\n\n" >> $output
+	echo "$name $(date +"%Y-%m-%d %H:%M:%S")" >> $output
 	for program in $@; do
-		printf "run $program $times times" | tee -a $output
-		{ time run $program $times; } 2>&1 | tee -a $output
-		echo '' >> $output
+		printf "$program\t$times times \t" | tee -a $output
+		{ time run $program $times; } 2>&1 | grep real | awk '{print $2}' | tee -a $output
 	done
+	echo '' >> $output
 }
 
 bench $@

@@ -18,15 +18,18 @@ def laplace(arr):
 
 
 def main():
-	arr = np.array([1, 3, 8, 7, 3, 9, 2, 5, 0, 1])
+	arr = np.arange(1, 11)
 	lap = laplace(arr)
 
-	import sys
-	if len(sys.argv) > 1:
-		print(f'arr:\t {arr}')
-		print(f'lap:\t {lap}')
-
-	return 0
+	import argparse
+	
+	parser = argparse.ArgumentParser()
+	parser.add_argument('-d', '--debug', action='store_true', help='print the calculation result for debugging')
+	args = parser.parse_args()
+	
+	if args.debug:
+		print(f'arr:\t{arr}')
+		print(f'lap:\t{lap}')
 
 if __name__ == '__main__':
 	main()

@@ -16,7 +16,6 @@ def laplace(arr):
 
 	return lap
 
-
 def main():
 	arr = np.arange(1, 11)
 	lap = laplace(arr)

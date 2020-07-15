@@ -42,12 +42,6 @@ float* laplace(float* arr, int size)
 	return lap;
 }
 
-float* farray(int size)
-{
-	float* array = (float*)malloc(size * sizeof(float));
-	return array;
-}
-
 void printa(float* array, const int size, char* prompt)
 {
 	printf("%s%f", prompt, *array);
@@ -55,4 +49,10 @@ void printa(float* array, const int size, char* prompt)
 		printf(", %f", array[i]);
 	}
 	printf("\n");
+}
+
+float* farray(int size)
+{
+	float* array = (float*)malloc(size * sizeof(float));
+	return array;
 }

@@ -1,22 +1,25 @@
 # Development Plan
-### Rewrite the computation kernel with C language
-Computing finite difference discrete Laplacian, and compare the efficiency of C version and Python + Numpy version.
+Rewrite the computationally intensive work with C language.  
 
 ### Feature
-- `main.c` is the C source files of computing Laplancian.
-- `Makefile` describes how to build the C codes in the `src` directory.
-- `lap.exe` is the executable file that computes Laplacian. It will appear after you finish the compilation.
-- `lap.py` is the Python script for computing Laplancian.
-- `bench.sh` is the benchmark that repeatedly runs the programs and shows the time it/they spent.
+This project has two components, `lap` and `mtx`. Each component contains both the native C and the Python+Numpy implementations.  
+
+- `lap` computes 1D finite difference discrete Laplacian with the periodic boundary condition.
+- `mtx` calculates the multiplication between two 3x3 matrices.
+
+This project also provides a general-purpose benchmark script `bench.sh` that repeatedly runs the given programs to evaluate the computational efficiencies of them.  
+
+The C source files need to be compiled, and this project uses a "top level" `Makefile`
+to organize the project structure and to call the "lower level" `Makefile`s in each conponent to complete the compilation process automatically.  
 
 ### Requirement
-To build these two version of programs, you need the following build tools and packages:
+To build these two version of programs, you need the following build tools and packages:  
 - GNU Compiler Collection or other C compiler
 - GNU Make
 - Python 3.6 or later
 - Numpy package
 
-For Ubuntu or other Debian-derived Linux distributions, directly type the following commands to install the tools and packages above  
+For Ubuntu or other Debian-derived Linux distributions, directly type the following commands to install the tools and packages above:  
 ```bash
 sudo apt update
 sudo apt install gcc make python3 python3-pip
@@ -24,17 +27,19 @@ pip3 install -r ../requirements.txt
 ```
 
 ### Usage
-#### Compile the C program
-Navigate to the `dev` directory, and `make` it.  
+#### Compile the C programs
+Navigate to the `dev` directory, and `make` them.  
 ```bash
 make
 ```
-After comilaltion, you will see an executable file named `lap.exe` appears in the current directory.  
+After comilaltion, you will see the executable files named `lap.exe` and `mtx.exe` appears in their correspoding directories.  
 
-If you want an executable which prints the calculation results for debugging, `make` it by the following commands.  
+If you want the executables which print the calculation results for debugging, `make` them by the following commands.  
 ```bash
 make clean debug
 ```
+
+All of these commands above use the "top level" `Makefile`. You can also modify and use the "lower level" `Makefile`s in the `lap` and `mtx` subdirectories, or manually compile the source files.  
 
 #### Run the benchmark script
 Here is a script `bench.sh` used to execute the programs repeatedly to evaluate the effieciency of the programs.  

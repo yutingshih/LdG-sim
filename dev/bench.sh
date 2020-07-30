@@ -46,7 +46,7 @@ function bench()
 
 	echo "$name $(date +"%Y-%m-%d %H:%M:%S")" >> $output
 	for program in $@; do
-		printf "$program\t$times times \t" | tee -a $output
+		printf "%-12s %6d %-8s" $program $times "times" | tee -a $output
 		{ time run $program $times; } 2>&1 | grep real | awk '{print $2}' | tee -a $output
 	done
 	echo '' >> $output

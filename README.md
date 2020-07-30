@@ -1,4 +1,10 @@
 # LdG-sim
+
+[![LdG-sim](https://img.shields.io/github/license/tings0802/LdG-sim)](https://github.com/tings0802/LdG-sim/blob/master/LICENSE)
+[![LdG-sim](https://img.shields.io/github/v/tag/tings0802/LdG-sim)](https://github.com/tings0802/LdG-sim/tags)
+![LdG-sim](https://img.shields.io/github/languages/code-size/tings0802/LdG-sim)
+![LdG-sim](https://img.shields.io/github/repo-size/tings0802/LdG-sim)
+
 An implementation of Landau-de Gennes's model of nematic liquid crystal simulation  
 
 ## Download and Checkout

@@ -7,6 +7,11 @@
 
 An implementation of Landau-de Gennes's model of nematic liquid crystal simulation  
 
+## Feature  
+- `src` contains the C source files which can be compiled to run the numerical simulation  
+- `utils` includes the preprocessing and post-processing tools used to generate the meshgrids, configure the simulation, and visualize the results  
+- `bench` provides a general-purpose benchmark script to evaluate the computational efficiencies of programs  
+
 ## Download  
 ```shell
 git clone https://github.com/tings0802/LdG-sim.git
@@ -33,25 +38,29 @@ python3 --version
 pip3 --version
 ```
 
+Then you can use the command to install Numpy and Matplotlib:
+```shell
+pip3 install -r utils/requirements.txt
+```
+
 #### From source code  
 For older versions of operating system or users that doesn't have the root permission to use package manager, You should build dependencies from source code.  
 
 > If you don't have pip, see this documentation to [install pip](https://pip.pypa.io/en/stable/installing/).  
 
-
-```shell
-pip3 install -r requirements.txt
-```
-
-## Installation  
-Navigate to the `LdG-sim` folder, and then `make` it.  
+## Compilation  
+Navigate to the `src` folder, and then `make` it.  
 
 ```bash
 make
 ```
 
 ## Usage
-
+To run a simulation with `LdG-sim`, you have to follow the instructions below:  
+1. modify the `utils/param.py` to configure the system to be simulated (e.g. box size, time steps)  
+2. run `utils/main.py` to generate the meshgrid with Q-tensors initialized and store it in `data/`  
+3. execute `bin/minie` with the given meshgrid to run the simulation  
+4. use `utils/visual.py` to visualize the system  
 
 <!-- ## Contributing -->
 

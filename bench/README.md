@@ -23,12 +23,12 @@ For Ubuntu or other Debian-derived Linux distributions, directly type the follow
 ```bash
 sudo apt update
 sudo apt install gcc make python3 python3-pip
-pip3 install -r ../requirements.txt
+pip3 install numpy
 ```
 
 ### Usage
 #### Compile the C programs
-Navigate to the `dev` directory, and `make` them.  
+Navigate to the `bench` directory, and `make` them.  
 ```bash
 make
 ```
@@ -44,7 +44,7 @@ All of these commands above use the "top level" `Makefile`. You can also modify 
 #### Run the benchmark script
 Here is a script `bench.sh` used to execute the programs repeatedly to evaluate the effieciency of the programs.  
 
-Stay at the `dev` directory, and then source the script.  
+Stay at the `bench` directory, and then source the script.  
 ```bash
 source ./bench.sh
 ```

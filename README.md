@@ -1,52 +1,63 @@
 # LdG-sim
 
-[![LdG-sim](https://img.shields.io/github/license/tings0802/LdG-sim)](https://github.com/tings0802/LdG-sim/blob/master/LICENSE)
-[![LdG-sim](https://img.shields.io/github/v/tag/tings0802/LdG-sim)](https://github.com/tings0802/LdG-sim/tags)
-![LdG-sim](https://img.shields.io/github/languages/code-size/tings0802/LdG-sim)
-![LdG-sim](https://img.shields.io/github/repo-size/tings0802/LdG-sim)
+[![license](https://img.shields.io/github/license/tings0802/LdG-sim)](https://github.com/tings0802/LdG-sim/blob/master/LICENSE)
+[![tag](https://img.shields.io/github/v/tag/tings0802/LdG-sim)](https://github.com/tings0802/LdG-sim/tags)
+![code-size](https://img.shields.io/github/languages/code-size/tings0802/LdG-sim)
+![repo-size](https://img.shields.io/github/repo-size/tings0802/LdG-sim)
 
 An implementation of Landau-de Gennes's model of nematic liquid crystal simulation  
 
-## Download and Checkout
+## Download  
 ```shell
 git clone https://github.com/tings0802/LdG-sim.git
 ```
 
+## Prerequisites  
+- C compiler that supports C99 standard  
+- GNU Make  
+- Python 3.6 or later  
+- Numpy  
+- Matplotlib  
 
-## Prerequisites
-- Python 3.6 or later
-- Numpy
-- Matplotlib
+After cloning the LdG-sim repository, you can use the following command to install the SDKs and packages of dependencies.  
 
-After cloning the LdG-sim repository, you can use the following command to install the packages of dependencies.  
-
-> If you don't have pip, see this documentation to  [install pip](https://pip.pypa.io/en/stable/installing/).  
-
-#### Windows
-```shell
-pip install -r requirements.txt
+#### With Package manager  
+For **Ubuntu 18.04**, **Debain 10**, or later versions, directly type the following command to install GCC, Make, Python, and pip:  
+```bash
+sudo apt update && sudo apt install -y build-essential python3 python3-pip
 ```
-#### Linux/MacOS
+
+You can check the versions of Python and pip with the following commands:  
+```bash
+python3 --version
+pip3 --version
+```
+
+#### From source code  
+For older versions of operating system or users that doesn't have the root permission to use package manager, You should build dependencies from source code.  
+
+> If you don't have pip, see this documentation to [install pip](https://pip.pypa.io/en/stable/installing/).  
+
+
 ```shell
 pip3 install -r requirements.txt
 ```
 
+## Installation  
+Navigate to the `LdG-sim` folder, and then `make` it.  
+
+```bash
+make
+```
 
 ## Usage
-Navigate to the `LdG-sim/` folder, then execute the `ldgsim/main.py`.  
-> please check that the Python executable has been added to the system environment variables
 
-#### Windows
-```shell
-python ldgsim/main.py
-```
-#### Linux/macOS
-```shell
-python3 ldgsim/main.py
-```
 
 <!-- ## Contributing -->
 
+<!-- ## Citation -->
 
 ## License
-LdG-sim is licensed under the [MIT License](https://github.com/tings0802/LdG-sim/blob/master/LICENSE).
+`LdG-sim` is released under the [MIT License](https://github.com/tings0802/LdG-sim/blob/master/LICENSE).  
+Please cite the following paper if you use this package for published research:  
+<a href="https://doi.org/10.1080/02678290903056095" target="_blank">M. Ravnik, S. Žumer, Liquid Crystals **36**, 1201-1214 (2009)</a>

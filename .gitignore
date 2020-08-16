@@ -3,6 +3,8 @@ __pycache__/
 *code-workspace
 *sublime*
 misc/
+data/
+image/
 
 *.o
 *.a

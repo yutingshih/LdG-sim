@@ -9,9 +9,9 @@ import_path = os.path.join(os.path.dirname(__file__), '..')
 if import_path not in sys.path:
 	sys.path.append(import_path)
 
-from ldgsim import param as prm
-from ldgsim import liqCrystal as LC
-from ldgsim import visual as vis
+from utils import param as prm
+from utils import liqCrystal as LC
+from utils import visual as vis
 
 def eigen(grid):
     ''' find the max eigenvalue and the corresponding normalized eigvector of Q '''
@@ -36,14 +36,23 @@ def main():
     # set initial condition and boundary condition
     sample.tensorialize()
     
-<<<<<<< HEAD
     # numerical iteration and visualization
     for i in range(prm.nsteps):
         sample.evolute()
 
         if i % prm.plot_rate == 0:
             sample.S, sample.n = sample.Q.eigen()
-=======
+            vis.plot(sample)
+            vis.save()
+        
+# Deprecated
+def main_():
+    # LC sample initialization
+    sample = LC.LCSample()
+
+    # set initial condition and boundary condition
+    sample.tensorialize()
+
     # numerical iteration
     s.all_Q(mesh)
     t = time.time()
@@ -62,12 +71,6 @@ def main():
     ax = plt.figure(figsize=[7, 7]).gca(projection='3d')
     o.streamline(ax, mesh)  # draw orientaion n
     plt.show()
->>>>>>> master
-
-            vis.plot(sample)
-            vis.save()
-        
-        break   # only run one step for test
 
 if __name__ == '__main__':
     main()

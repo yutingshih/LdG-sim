@@ -3,9 +3,9 @@ import numpy as np
 from matplotlib import pyplot as plt, ticker as tk
 from mpl_toolkits.mplot3d import Axes3D
 
-from ldgsim import param as p
-from ldgsim import mesh as m
-from ldgsim import cond as c
+from utils import param as p
+from utils import mesh as m
+from utils import cond as c
 
 def filter_r(grid):
     ''' filter the position r from a single grid and store it as a tuple '''

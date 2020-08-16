@@ -1,7 +1,7 @@
 import numpy as np
 
-from ldgsim import utility as u
-from ldgsim import param as p
+from utils import utility as u
+from utils import param as p
 
 ''' mesh (object) '''
 class Grid(object):

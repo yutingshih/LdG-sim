@@ -7,8 +7,8 @@ import_path = os.path.join(os.path.dirname(__file__), '..')
 if import_path not in sys.path:
 	sys.path.append(import_path)
 
-from ldgsim import param as prm
-from ldgsim import liqCrystal as LC
+from utils import param as prm
+from utils import liqCrystal as LC
 
 def figtext(axes, title='', label=(), locator=(4, 2), fontsize=12):
 	''' add title, axis labels, and locators onto the figure '''

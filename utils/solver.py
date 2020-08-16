@@ -1,9 +1,9 @@
 import numpy as np
 
-from ldgsim import utility as u
-from ldgsim import param as p
-from ldgsim import cond as c
-from ldgsim import mesh as m
+from utils import utility as u
+from utils import param as p
+from utils import cond as c
+from utils import mesh as m
 
 def println(Q):
     ''' print for debug '''

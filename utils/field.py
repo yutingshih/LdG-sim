@@ -5,7 +5,7 @@ import_path = os.path.join(os.path.dirname(__file__), '..')
 if import_path not in sys.path:
 	sys.path.append(import_path)
 
-from ldgsim import param as prm
+from utils import param as prm
 
 class ScalarField(np.ndarray):
 	def __new__(cls, data=np.ones(prm.mesh_shape), mesh_shape=prm.mesh_shape):

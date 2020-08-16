@@ -5,8 +5,8 @@ import_path = os.path.join(os.path.dirname(__file__), '..')
 if import_path not in sys.path:
 	sys.path.append(import_path)
 
-from ldgsim import param as prm
-from ldgsim import field as fld
+from utils import param as prm
+from utils import field as fld
 
 class LCSample(object):
 	def __init__(self, orientation=fld.cartesian(prm.n_init), order_degree=prm.S_init, biaxiality=0):

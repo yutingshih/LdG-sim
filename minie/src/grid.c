@@ -3,7 +3,7 @@
 grid* new_grid(int x, int y, int z, char tag)
 {
     assert(&x != NULL);
-    assert(&y != NULL);
+    assert(&y != NULL   );
     assert(&z != NULL);
     assert(tag);
 

@@ -9,9 +9,9 @@
 #define EQUAL_TH 1e-6
 
 struct matrix {
-	size_t row;
-	size_t col;
-	double* elements;
+    size_t row;
+    size_t col;
+    double* elements;
 };
 
 typedef struct matrix matrix;
@@ -26,6 +26,7 @@ void set_item(matrix* self, size_t row, size_t col, double value);
 bool equal(const matrix* m, const matrix* n);
 bool symmetric(const matrix* self);
 bool traceless(const matrix* self);
+double sum_m(const matrix* self);
 
 matrix* trans(const matrix* m);
 matrix* add_mm(const matrix* m, const matrix* n);

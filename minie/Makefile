@@ -20,20 +20,21 @@ LDFLAGS = -lm
 all: build debug
 
 build:
-    @mkdir -p $(OBJDIR) $(APPDIR)
+	@mkdir -p $(OBJDIR) $(APPDIR)
 
 debug: CFLAGS += -g -O0 -DDEBUG
 debug: $(APP)
-    $(APP)
+	$(APP)
 
 bench: CFLAGS += -O3
 bench: $(APP)
 
 clean:
-    -@rm -rvf $(OBJ) $(APP)
+	-@rm -rvf $(OBJ) $(APP)
+
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
-    $(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(APP): $(OBJ)
-    $(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)

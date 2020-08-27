@@ -23,10 +23,16 @@ size_t get_row(const matrix* self);
 size_t get_col(const matrix* self);
 double get_item(const matrix* self, size_t row, size_t col);
 void set_item(matrix* self, size_t row, size_t col, double value);
+
 bool equal(const matrix* m, const matrix* n);
 bool symmetric(const matrix* self);
 bool traceless(const matrix* self);
 double sum_m(const matrix* self);
+
+void add_m(matrix* self, const matrix* m);
+void add_s(matrix* self, double s);
+void mul_m(matrix* self, const matrix* m);
+void mul_s(matrix* self, double s);
 
 matrix* trans(const matrix* m);
 matrix* add_mm(const matrix* m, const matrix* n);

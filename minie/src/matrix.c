@@ -100,9 +100,37 @@ double sum_m(const matrix* self)
 {
     assert(self);
     double sum = *self->elements;
-    for (size_t i = 1; i < 9; i++)
+    for (size_t i = 1; i < get_row(self) * get_col(self); i++)
         sum += self->elements[i];
     return sum;
+}
+
+void add_m(matrix* self, const matrix* m)
+{
+    assert(get_row(self) == get_row(m));
+    assert(get_col(self) == get_col(m));
+    for (size_t i = 0; i < get_row(self) * get_col(self); i++)
+        self->elements[i] += m->elements[i];
+}
+
+void add_s(matrix* self, double s)
+{
+    for (size_t i = 0; i < get_row(self) * get_col(self); i++)
+        self->elements[i] += s;
+}
+
+void mul_m(matrix* self, const matrix* m)
+{
+    assert(get_row(self) == get_row(m));
+    assert(get_col(self) == get_col(m));
+    for (size_t i = 0; i < get_row(self) * get_col(self); i++)
+        self->elements[i] *= m->elements[i];
+}
+
+void mul_s(matrix* self, double s)
+{
+    for (size_t i = 0; i < get_row(self) * get_col(self); i++)
+        self->elements[i] *= s;
 }
 
 matrix* trans(const matrix* m)
@@ -185,7 +213,7 @@ matrix* dot_mm(const matrix* m, const matrix* n)
 {
     assert(get_col(m) == get_row(n));
 
-    matrix* out = new_matrix(get_col(m), get_row(m));
+    matrix* out = new_matrix(get_row(m), get_col(n));
     if (!out) return out;
 
     double temp;

@@ -1,24 +1,31 @@
 #include "grid.h"
 
-grid* new_grid(int x, int y, int z, char tag)
+grid* new_grid(int x, int y, int z, type t)
 {
     assert(&x != NULL);
-    assert(&y != NULL   );
+    assert(&y != NULL);
     assert(&z != NULL);
-    assert(tag);
+    assert((t == BULK) || (t == UNI) | (t == DEG));
 
     grid* self = malloc(sizeof(grid));
-    if(!self) return self;
+    if (!self) return self;
 
     self->x = x;
     self->y = y;
     self->z = z;
-    self->tag = tag;
+    self->t = t;
     self->Q = new_matrix(3, 3);
     self->h = new_matrix(3, 3);
 
     if (!(self->Q) || !(self->h)) {
-        (self->Q) ? free(self->Q) : free(self->h);
+        if (!(self->Q)) {
+            free_matrix(self->Q);
+            self->Q = NULL;
+        }
+        if (!(self->h)) {
+            free_matrix(self->h);
+            self->h = NULL;
+        }
         free(self);
         self = NULL;
         return self;
@@ -60,10 +67,10 @@ int get_z(const grid* self)
     return self->z;
 }
 
-char get_tag(const grid* self)
+char get_type(const grid* self)
 {
     assert(self);
-    return self->tag;
+    return self->t;
 }
 
 matrix* get_Q(const grid* self)

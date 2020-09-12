@@ -1,6 +1,7 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <assert.h>
@@ -8,13 +9,11 @@
 
 #define EQUAL_TH 1e-6
 
-struct matrix {
+typedef struct {
     size_t row;
     size_t col;
     double* elements;
-};
-
-typedef struct matrix matrix;
+} matrix;
 
 matrix* new_matrix(size_t row, size_t col);
 void free_matrix(void* self);
@@ -42,5 +41,7 @@ matrix* mul_mm(const matrix* m, const matrix* n);
 matrix* mul_ms(const matrix* m, double s);
 matrix* mul_sm(double s, const matrix* m);
 matrix* dot_mm(const matrix* m, const matrix* n);
+
+void print(matrix* mtx, char* prompt);
 
 #endif // MATRIX_H

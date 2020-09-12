@@ -229,3 +229,14 @@ matrix* dot_mm(const matrix* m, const matrix* n)
 
     return out;
 }
+
+void print(matrix* mtx, char* prompt)
+{
+    printf("%s", prompt);
+    for (int i = 0; i < get_row(mtx); i++) {
+        for (int j = 0; j < get_col(mtx); j++) {
+            printf("%6.2f ", get_item(mtx, i, j));
+        }
+        printf("\n");
+    }
+}

@@ -15,23 +15,23 @@ CC = gcc
 CFLAGS = -Wall -std=c99 -pedantic -I$(INCDIR)
 LDFLAGS = -lm
 
-.PHONY: all build bench clean debug
+.PHONY: all build clean debug release
 
 all: build debug
 
 build:
-	@mkdir -p $(OBJDIR) $(APPDIR)
+	@if [[ ! -d $(OBJDIR) ]]; then mkdir -p $(OBJDIR); fi
+	@if [[ ! -d $(APPDIR) ]]; then mkdir -p $(APPDIR); fi
 
 debug: CFLAGS += -g -O0 -DDEBUG
 debug: $(APP)
 	$(APP)
 
-bench: CFLAGS += -O3
-bench: $(APP)
+release: CFLAGS += -O3 -DNDEBUG
+release: $(APP)
 
 clean:
 	-@rm -rvf $(OBJ) $(APP)
-
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) -c -o $@ $<

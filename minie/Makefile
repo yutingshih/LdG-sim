@@ -25,7 +25,6 @@ build:
 
 debug: CFLAGS += -g -O0 -DDEBUG
 debug: $(APP)
-	$(APP)
 
 release: CFLAGS += -O3 -DNDEBUG
 release: $(APP)

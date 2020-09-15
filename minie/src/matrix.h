@@ -21,7 +21,9 @@ void free_matrix(void* self);
 size_t get_row(const matrix* self);
 size_t get_col(const matrix* self);
 double get_item(const matrix* self, size_t row, size_t col);
+double get_elem(const matrix* self, size_t index);
 void set_item(matrix* self, size_t row, size_t col, double value);
+void set_elem(matrix* self, size_t index, double value);
 
 bool equal(const matrix* m, const matrix* n);
 bool symmetric(const matrix* self);

@@ -51,11 +51,23 @@ double get_item(const matrix* self, size_t row, size_t col)
     return self->elements[row * get_col(self) + col];
 }
 
+double get_elem(const matrix* self, size_t index)
+{
+    assert(index < get_row(self) * get_col(self));
+    return self->elements[index];
+}
+
 void set_item(matrix* self, size_t row, size_t col, double value)
 {
     assert(row < get_row(self));
     assert(col < get_col(self));
     self->elements[row * get_col(self) + col] = value;
+}
+
+void set_elem(matrix* self, size_t index, double value)
+{
+    assert(index < get_row(self) * get_col(self));
+    self->elements[index] = value;
 }
 
 bool equal(const matrix* m, const matrix* n)

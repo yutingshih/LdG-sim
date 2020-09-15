@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include <stdbool.h>
 #include <assert.h>
 #include <math.h>
@@ -43,6 +44,8 @@ matrix* mul_mm(const matrix* m, const matrix* n);
 matrix* mul_ms(const matrix* m, double s);
 matrix* mul_sm(double s, const matrix* m);
 matrix* dot_mm(const matrix* m, const matrix* n);
+
+matrix* laplacian(const matrix* self, int count, ...);
 
 void print(matrix* mtx, char* prompt);
 

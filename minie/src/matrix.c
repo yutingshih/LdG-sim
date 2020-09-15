@@ -242,6 +242,21 @@ matrix* dot_mm(const matrix* m, const matrix* n)
     return out;
 }
 
+matrix* laplacian(const matrix* self, int count, ...)
+{
+    matrix* lapQ = new_matrix(3, 3);
+    va_list ap;
+    va_start(ap, count);
+
+    for (int i = 0; i < count; i++)
+        add_m(lapQ, va_arg(ap, matrix*));
+    mul_s(lapQ, 1.0 / (double)count);
+    add_m(lapQ, mul_ms(self, -1.0));
+
+    va_end(ap);
+    return lapQ;
+}
+
 void print(matrix* mtx, char* prompt)
 {
     printf("%s", prompt);

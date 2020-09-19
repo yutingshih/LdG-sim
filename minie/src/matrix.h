@@ -17,6 +17,7 @@ typedef struct {
 } matrix;
 
 matrix* new_matrix(size_t row, size_t col);
+matrix* init_matrix(matrix* self, double value, ...);
 void free_matrix(void* self);
 
 size_t get_row(const matrix* self);
@@ -29,6 +30,7 @@ void set_elem(matrix* self, size_t index, double value);
 bool equal(const matrix* m, const matrix* n);
 bool symmetric(const matrix* self);
 bool traceless(const matrix* self);
+double trace(const matrix* self);
 double sum_m(const matrix* self);
 
 void add_m(matrix* self, const matrix* m);
@@ -45,6 +47,7 @@ matrix* mul_ms(const matrix* m, double s);
 matrix* mul_sm(double s, const matrix* m);
 matrix* dot_mm(const matrix* m, const matrix* n);
 
+matrix* diagonal(size_t size ,double value);
 matrix* laplacian(const matrix* self, int count, ...);
 
 void print(matrix* mtx, char* prompt);

@@ -21,6 +21,19 @@ matrix* new_matrix(size_t row, size_t col)
     return self;
 }
 
+matrix* init_matrix(matrix* self, double value, ...)
+{
+    va_list ap;
+    va_start(ap, value);
+
+    self->elements[0] = value;
+    for (int i = 1; i < self->row * self->col; i++)
+        self->elements[i] = va_arg(ap, double);
+
+    va_end(ap);
+    return self;
+}
+
 void free_matrix(void* self)
 {
     if (!self) return;
@@ -99,13 +112,22 @@ bool traceless(const matrix* self)
 {
     if (get_row(self) == get_col(self)) return false;
 
-    double temp = 0.0f;
+    double temp = 0.0;
     for (size_t i = 0; i < get_row(self); i++)
         temp += get_item(self, i, i);
 
     if (fabs(temp) > EQUAL_TH) return false;
 
     return true;
+}
+
+double trace(const matrix* self)
+{
+    assert(get_row(self) == get_col(self));
+    double temp = 0.0;
+    for (size_t i = 0; i < get_row(self); i++)
+        temp += get_item(self, i, i);
+    return temp;
 }
 
 double sum_m(const matrix* self)
@@ -242,9 +264,17 @@ matrix* dot_mm(const matrix* m, const matrix* n)
     return out;
 }
 
+matrix* diagonal(size_t size ,double value)
+{
+    matrix* diag = new_matrix(size, size);
+    for (int i = 0; i < size; i++)
+        set_item(diag, i, i, value);
+    return diag;
+}
+
 matrix* laplacian(const matrix* self, int count, ...)
 {
-    matrix* lapQ = new_matrix(3, 3);
+    matrix* lapQ = new_matrix(get_row(self), get_col(self));
     va_list ap;
     va_start(ap, count);
 

@@ -9,7 +9,7 @@ APPDIR = .
 
 SRC = $(wildcard $(SRCDIR)/*.c)
 OBJ = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRC))
-APP = $(APPDIR)/gen.out
+APP = data.out lap.out
 
 CC = gcc
 CFLAGS = -Wall -std=c99 -pedantic -I$(INCDIR)
@@ -17,7 +17,7 @@ LDFLAGS = -lm
 
 .PHONY: all build clean
 
-all: build $(APP)
+all: build data lap
 
 build:
 	@if [[ ! -d $(OBJDIR) ]]; then mkdir -p $(OBJDIR); fi
@@ -26,8 +26,8 @@ build:
 clean:
 	-@rm -rvf $(OBJ) $(APP)
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) -c -o $@ $<
+data.out: data.c
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-$(APP): $(OBJ)
+lap.out: lap.c ../src/matrix.c
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)

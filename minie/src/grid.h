@@ -15,6 +15,7 @@ struct grid {
     type t;
     matrix* Q;
     matrix* h;
+    matrix* Qb;
 };
 
 typedef struct grid grid;
@@ -28,12 +29,13 @@ int get_z(const grid* self);
 char get_type(const grid* self);
 matrix* get_Q(const grid* self);
 matrix* get_h(const grid* self);
+matrix* get_Qb(const grid* self);
 
 void molefield(grid* self, const param* prm, 
                const matrix* top, const matrix* bottom,
-               const matrix* left, const matrix* right,
+               const matrix* right, const matrix* left,
                const matrix* front, const matrix* back, 
-               const matrix* Qbound, const matrix* normal);
+               const matrix* bound, const matrix* normal);
 void evolute(grid* self, const param* prm);
 
 #endif // GRID_H

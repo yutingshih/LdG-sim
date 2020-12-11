@@ -7,9 +7,9 @@
 
 int main(int argc, const char* argv[])
 {
-	srand(time(NULL));
-	for (int i = 0; i < NUMBER_OF_MATRICES * NUMBER_OF_ELEMENTS; i++)
-		printf("%lf ", (double)rand());
-	printf("\n");
-	return 0;
+    srand(time(NULL));
+    for (int i = 0; i < NUMBER_OF_MATRICES * NUMBER_OF_ELEMENTS; i++)
+        printf("%lf ", (double)rand());
+    printf("\n");
+    return 0;
 }

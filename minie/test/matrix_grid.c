@@ -49,10 +49,14 @@ void test_matrix(void)
 
     add_s(mtx1, 1.0);
     print(mtx1, "\n0.2 * A + 1.0 =\n");
+	
+	matrix* mtx4 = diagonal(3, 1.0);
+	print(mtx4, "\nX =\n");
 
     free_matrix(mtx1);
     free_matrix(mtx2);
     free_matrix(mtx3);
+	free_matrix(mtx4);
 }
 
 void test_grid(void)

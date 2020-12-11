@@ -15,7 +15,7 @@ CC = gcc
 CFLAGS = -Wall -std=c99 -pedantic -I$(INCDIR)
 LDFLAGS = -lm
 
-.PHONY: all build clean debug release
+.PHONY: all build clean check debug release
 
 all: build debug
 
@@ -28,6 +28,9 @@ debug: $(APP)
 
 release: CFLAGS += -O3 -DNDEBUG
 release: $(APP)
+
+check:
+	valgrind $(APP)
 
 clean:
 	-@rm -rvf $(OBJ) $(APP)

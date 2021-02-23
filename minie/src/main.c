@@ -13,7 +13,7 @@ void load_Q(grid* mesh);
 void save_Q(const grid* mesh);
 
 matrix* Q_tensor(const matrix* n, double S);
-// void simulate(grid* mesh);
+int pbc(int index, int shift, int period);  // periodic boundary condition
 
 void printmesh(const grid* mesh);
 void count_types(grid* mesh);
@@ -35,7 +35,7 @@ int main(int argc, char const *argv[])
     prm.dy = 1;
     prm.dz = 1;
     prm.dt = 3e-7;
-    prm.t = 3e-2;
+    prm.t = 3e-4;
 
     n_subs = init_matrix(new_matrix(1, 3), 1.0, 0.0, 0.0);
     n_shel = init_matrix(new_matrix(1, 3), 1.0, 0.0, 0.0);
@@ -44,6 +44,8 @@ int main(int argc, char const *argv[])
     S_shel = 0.9;
     S_cent = 0.5;
     S_init = 0.1;
+
+    int save_rate = 100;
 
     grid mesh[N];
     init(mesh);
@@ -55,29 +57,25 @@ int main(int argc, char const *argv[])
     matrix* gradQz = new_matrix(3, 3);
     matrix* inner;
 
-    for (int i = 0; i < (int)(prm.t / prm.dt); i++) {
+    for (int t = 0; t < (int)(prm.t / prm.dt); t++) {
         for (int j = 0; j < N; j++) {
 
-            int top = (j + 1) % NZ;
-            int bottom = (j - 1) % NZ;
-            int right = (j + NZ) % NY;
-            int left = (j - NZ) % NY;
-            int front = (j + NZ * NY) % NX;
-            int back = (j - NZ * NY) % NX;
+            int top    = pbc(j,        1,           NZ);
+            int bottom = pbc(j,       -1,           NZ);
+            int right  = pbc(j,       NZ,      NY * NZ);
+            int left   = pbc(j,      -NZ,      NY * NZ);
+            int front  = pbc(j,  NZ * NY, NX * NY * NZ);
+            int back   = pbc(j, -NZ * NY, NX * NY * NZ);
 
-            lapQ = laplacian(mesh[j].Q, 6, mesh[top].Q, mesh[bottom].Q, mesh[right].Q, mesh[left].Q, mesh[front].Q, mesh[back].Q);
+            printf("%d %d %d %d %d %d\n", top, bottom, right, left, front, back);
 
-            for (int k = 0; k < 9; k++) {
-                set_elem(gradQx, k, (get_elem(mesh[front].Q, k) - get_elem(mesh[back].Q, k)) / (2 * prm.dx));
-                set_elem(gradQy, k, (get_elem(mesh[right].Q, k) - get_elem(mesh[left].Q, k)) / (2 * prm.dy));
-                set_elem(gradQz, k, (get_elem(mesh[top].Q, k) - get_elem(mesh[bottom].Q, k)) / (2 * prm.dz));
-            }
-
-            inner = dot_mm(mesh[j].Q, mesh[j].Q);
-            double coeff = sum_m(mul_mm(mesh[j].Q, trans(mesh[j].Q)));
 
             switch (mesh[j].t) {
                 case BULK:
+                    lapQ = laplacian(mesh[j].Q, 6, mesh[top].Q, mesh[bottom].Q, mesh[right].Q, mesh[left].Q, mesh[front].Q, mesh[back].Q);
+                    inner = dot_mm(mesh[j].Q, mesh[j].Q);
+                    double coeff = sum_m(mul_mm(mesh[j].Q, trans(mesh[j].Q)));
+                    
                     for (int k = 0; k < 9; k++) {
                         set_elem(mesh[j].h, k, (prm.L * get_elem(lapQ, k))
                                              - (prm.A * get_elem(mesh[j].Q, k))
@@ -88,6 +86,11 @@ int main(int argc, char const *argv[])
                 
                 case UNI:
                     for (int k = 0; k < 9; k++) {
+                        set_elem(gradQx, k, (get_elem(mesh[front].Q, k) - get_elem(mesh[back].Q, k)) / (2 * prm.dx));
+                        set_elem(gradQy, k, (get_elem(mesh[right].Q, k) - get_elem(mesh[left].Q, k)) / (2 * prm.dy));
+                        set_elem(gradQz, k, (get_elem(mesh[top].Q, k) - get_elem(mesh[bottom].Q, k)) / (2 * prm.dz));
+                    }
+                    for (int k = 0; k < 9; k++) {
                         set_elem(mesh[j].h, k,
                             prm.L * (get_elem(gradQx, k) * mesh[j].x + get_elem(gradQy, k) * mesh[j].y + get_elem(gradQz, k) * mesh[j].z)
                           + prm.W_uni * (get_elem(mesh[j].Q, k) - get_elem(mesh[j].Qb, k)));
@@ -95,6 +98,13 @@ int main(int argc, char const *argv[])
                     break;
                 
                 case DEG:
+                    for (int k = 0; k < 9; k++) {
+                        set_elem(gradQx, k, (get_elem(mesh[front].Q, k) - get_elem(mesh[back].Q, k)) / (2 * prm.dx));
+                        set_elem(gradQy, k, (get_elem(mesh[right].Q, k) - get_elem(mesh[left].Q, k)) / (2 * prm.dy));
+                        set_elem(gradQz, k, (get_elem(mesh[top].Q, k) - get_elem(mesh[bottom].Q, k)) / (2 * prm.dz));
+                    }
+                    mesh[j].Qb = Q_tensor(n_subs, S_subs); // degenerate
+
                     for (int k = 0; k < 9; k++) {
                         set_elem(mesh[j].h, k,
                             prm.L * (get_elem(gradQx, k) * mesh[j].x + get_elem(gradQy, k) * mesh[j].y + get_elem(gradQz, k) * mesh[j].z)
@@ -108,6 +118,8 @@ int main(int argc, char const *argv[])
         for(int j = 0; j < N; j++) {
             add_m(mesh[j].Q, mul_sm(prm.dt / prm.gamma, mesh[j].h));
         }
+
+        if (t % save_rate == 0) save_Q(mesh);
     }
 
     free_matrix(lapQ);
@@ -116,11 +128,11 @@ int main(int argc, char const *argv[])
     free_matrix(gradQz);
     free_matrix(inner);
 
-    save_Q(mesh);
     return 0;
 }
 // #endif // DEBUG
 
+// specify the cooridinates, Q tensors, Q bounds, and molecular fields of every grids in the mesh
 void init(grid* mesh)
 {
     double distance;
@@ -135,12 +147,12 @@ void init(grid* mesh)
         distance = norm(DIMENSION, mesh[i].x, mesh[i].y, mesh[i].z);
 
         if (mesh[i].z == 0 || mesh[i].z == NZ - 1) {
-            mesh[i].t = DEG;
-            mesh[i].Qb = Q_tensor(n_subs, S_subs); // degenerate
-        }
-        else if (fabs(distance - RADIUS) <= THICKNESS) {
             mesh[i].t = UNI;
             mesh[i].Qb = Q_tensor(n_shel, S_shel); // uniform
+        }
+        else if (fabs(distance - RADIUS) <= THICKNESS) {
+            mesh[i].t = DEG;
+            mesh[i].Qb = Q_tensor(n_subs, S_subs); // degenerate
         }
         else {
             mesh[i].t = BULK;
@@ -149,6 +161,7 @@ void init(grid* mesh)
     }
 }
 
+// calculate the Euclidean distance from the origin
 double norm(int count, ...)
 {
     va_list ap;
@@ -179,6 +192,12 @@ matrix* Q_tensor(const matrix* n, double S)
     return Q;
 }
 
+// periodic boundary condition
+int pbc(int index, int shift, int period)
+{
+    return MOD(index + shift, period) + index / period * period;
+}
+
 void load_Q(grid* mesh)
 {
     for (int i = 0; i < N; i++)
@@ -193,21 +212,8 @@ void save_Q(const grid* mesh)
             printf("%lf,", *(double *)(get_Q(mesh + i) + j));
 }
 
-// void simulate(grid* mesh, const param* prm)
-// {
-//     for (int i = 0; i < N; i++) {
-//         molefield(mesh[i], prm,
-//             mesh[(i + 1) % NZ].Q,
-//             mesh[(i - 1) % NZ].Q,
-//             mesh[(i + NZ) % NY].Q,
-//             mesh[(i - NZ) % NY].Q,
-//             mesh[(i + NZ * NY) % NX].Q,
-//             mesh[(i - NZ * NY) % NX].Q,
-//             mesh[], normal);
-//         evolute(mesh[i], prm);
-//     }
-// }
 
+// print mesh info for debugging
 void printmesh(const grid* mesh)
 {
     for (int i = 0; i < N; i++) {
@@ -218,6 +224,7 @@ void printmesh(const grid* mesh)
     }
 }
 
+// print mesh info for debugging
 void count_types(grid* mesh) {
     int bulk = 0, uni = 0, deg = 0;
     for (int i = 0; i < N; i++) {

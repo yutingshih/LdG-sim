@@ -25,6 +25,7 @@ typedef struct {
 #define RADIUS 7
 #define THICKNESS 1
 #define DELTA(i, j) (i == j ? 1 : 0)
+#define MOD(a, b) ((a) >= 0 ? (a) % (b) : (a) % (b) + (b))
 
 matrix* n_subs;
 matrix* n_shel;

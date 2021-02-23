@@ -105,6 +105,14 @@ class LCSample(object):
 		else:
 			raise ValueError(f'assign Q with invalid shape {value.shape}')
 	
+	def saveQ(self, dir='data', prefix='LC'):
+		os.makedirs(dir, exist_ok=True)
+		path = os.path.join(dir, datetime.datetime.now().strftime(f'{prefix}_%y%m%d_%H%M%S_%f.txt'))
+		Q = self.Q.serialize()
+		with open(path, 'w') as file:
+			file.write(f'{Q}\n')
+		return path
+
 	def save(self, dir='data/test', prefix='LC'):
 		os.makedirs(dir, exist_ok=True)
 		path = os.path.join(dir, datetime.datetime.now().strftime(f'{prefix}_%y%m%d_%H%M%S_%f.txt'))

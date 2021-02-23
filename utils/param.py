@@ -5,9 +5,9 @@ path = '../data/result.txt'
 
 """ spatial parameters """
 dr = 300			# spatial resolution (300 nm per grid)
-x_real = 8000
-y_real = 8000
-z_real = 5000
+x_real = 7500
+y_real = 7500
+z_real = 4500
 r_real = 2000       # radius (nm) of shpere (i.e. origin of meshgrid)
 
 """ temporal parameters """

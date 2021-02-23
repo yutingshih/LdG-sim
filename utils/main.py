@@ -35,15 +35,16 @@ def main():
 
     # set initial condition and boundary condition
     sample.tensorialize()
+    sample.saveQ('../minie/data', 'init')
     
     # numerical iteration and visualization
-    for i in range(prm.nsteps):
-        sample.evolute()
+    # for i in range(prm.nsteps):
+    #     sample.evolute()
 
-        if i % prm.plot_rate == 0:
-            sample.S, sample.n = sample.Q.eigen()
-            vis.plot(sample)
-            vis.save()
+    #     if i % prm.plot_rate == 0:
+    #         sample.S, sample.n = sample.Q.eigen()
+    #         vis.plot(sample)
+    #         vis.save()
         
 # Deprecated
 def main_():
